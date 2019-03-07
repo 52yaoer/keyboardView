@@ -1,0 +1,233 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>AUI快速完成布局</title>
+		<link rel="stylesheet" type="text/css" href="../css/aui.2.0.css" />
+		<style>
+			body,section {
+				background-color: transparent !important;
+				padding: 0;
+				margin: 0;
+			}
+			.redtext{
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<section class="aui-grid">
+			<div class="aui-row redtext">
+				<div class="aui-col-xs-3" onclick="closeStreamView()">
+					<div class="aui-grid-label">
+						关闭直播预览
+					</div>
+				</div>
+				<div class="aui-col-xs-3" onclick="switchCamera()">
+					<div class="aui-grid-label">
+						相机切换
+					</div>
+				</div>
+				<div class="aui-col-xs-3" onclick="switchMute()">
+					<div class="aui-grid-label">
+						静音开关
+					</div>
+				</div>
+				<div class="aui-col-xs-3" onclick="switchMirror()">
+					<div class="aui-grid-label">
+						镜像切换
+					</div>
+				</div>
+				<div class="aui-col-xs-3" onclick="publishStateListener()">
+					<div class="aui-grid-label">
+						直播推流状态监听
+					</div>
+				</div>
+				<div class="aui-col-xs-3" onclick="startPublish()">
+					<div class="aui-grid-label">
+						开始直播
+					</div>
+				</div>
+				<div class="aui-col-xs-3" onclick="stopPublish()">
+					<div class="aui-grid-label">
+						停止直播
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="conferenceStateListener()">
+					<div class="aui-grid-label">
+						连麦状态监听
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="startConference()">
+					<div class="aui-grid-label">
+						开始连麦
+					</div>
+				</div>
+				<div class="aui-col-xs-3" onclick="stopConference()">
+					<div class="aui-grid-label">
+						停止连麦
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="getGroupStickerList()">
+					<div class="aui-grid-label">
+						获取贴纸列表
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="showGroupSticker()">
+					<div class="aui-grid-label">
+						设置贴纸
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="getFilterList()">
+					<div class="aui-grid-label">
+						获取滤镜列表
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="showGroupFilter()">
+					<div class="aui-grid-label">
+						设置滤镜
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="getFilterArg()">
+					<div class="aui-grid-label">
+						获取滤镜参数
+					</div>
+				</div>
+				
+			</div>
+		</section>
+	</body>
+	<script type="text/javascript" src="../script/api.js" ></script>
+	<script type="text/javascript">
+		
+		
+		var demo ;
+		apiready = function() {
+			api.parseTapmode();
+			demo = api.require('tutuQiniuLive');
+		}
+		var tab = document.querySelectorAll(".aui-tab-item");
+		for (var i in tab) {
+			tab[i].onclick = function(e) {
+				document.querySelector(".aui-tab-item.aui-active").classList.remove("aui-active");
+				e.target.classList.add("aui-active");
+			}
+		}
+		
+		function closeStreamView() {
+			demo.closeStreamView(function(ret, err) {
+				//alert(JSON.stringify(ret) +"  "+ JSON.stringify(err));
+				api.closeFrame({
+					name : 'TuQiniuLive_frameBtn'
+				});
+			});
+		}
+		
+		function switchCamera() {
+			demo.switchCamera(function(ret, err) {
+				//alert(JSON.stringify(ret) +"  "+ JSON.stringify(err));
+			});
+		}
+
+		function switchMute() {
+			demo.switchMute(function(ret, err) {
+				//alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function switchMirror() {
+			demo.switchMirror(function(ret, err) {
+				//alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		
+		function publishStateListener() {
+			demo.publishStateListener(function(ret, err) {
+				api.toast({
+	                msg : JSON.stringify(ret) + "  " + JSON.stringify(err)
+                });
+			});
+		}
+		
+		function startPublish() {
+			demo.startPublish({
+				publishAddr : 'rtmp://pili-publish.pili2test.qbox.net/pili2test/zhaofei?e=1520738338&token=dSC2IIrmjNXONzPvVgXZo0mI0AI83835NIuXQ3iD:vUX7J9TxIYtHB052vwLrBCdHvVI='
+			},function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function stopPublish() {
+			demo.stopPublish(function(ret, err) {
+				//alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function conferenceStateListener() {
+			demo.conferenceStateListener(function(ret, err) {
+				api.toast({
+	                msg : JSON.stringify(ret) + "  " + JSON.stringify(err)
+                });
+			});
+		}
+		
+
+		function startConference() {
+			demo.startConference({
+				roomToken : '12333' //需要服务器获取
+			},function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function stopConference() {
+			demo.stopConference(function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function getGroupStickerList() {
+			demo.getGroupStickerList(function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function showGroupSticker() {
+			demo.showGroupSticker({
+				groupId : 1282
+			},function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function getFilterList() {
+			demo.getFilterList(function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function showGroupFilter() {
+			demo.showGroupFilter({
+				code : 'Spring'
+			},function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function getFilterArg() {
+			demo.getFilterArg(function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+	</script>
+</html>

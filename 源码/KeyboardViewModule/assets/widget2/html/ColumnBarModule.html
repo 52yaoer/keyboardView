@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="open1()" >打开导航菜单</a>
+				<a class="button" tapmode="active" onclick="setCurrentItem1()" >设置当前选中项</a>
+				<a class="button" tapmode="active" onclick="hide1()" >隐藏导航菜单</a>
+				<a class="button" tapmode="active" onclick="show1()" >显示导航菜单</a>
+				<a class="button" tapmode="active" onclick="close1()" >关闭导航菜单</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('columnBar');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+			demo.onItemClick(function(ret, err) {
+				alert("onItemClick>>" + JSON.stringify(ret));
+			});
+			demo.onDataChange(function(ret, err) {
+				alert("onDataChange>>" + JSON.stringify(ret));
+			});
+			demo.outNumberMax(function(ret, err){
+	        	alert("outNumberMax>>"+JSON.stringify(ret));
+	        });
+		}
+		function open1() {
+			var param1 = {
+				rect : {
+					x : 0,
+					y : 20,
+					w : api.frameWidth,
+					h : api.frameHeight
+				},
+				fixedOn : api.frameName,
+				fixed : true,
+				allData : ["推荐", "热点", "成都", "视频", "社会", "图片", "娱乐", "问答", "科技", "财经", "军事", "段子", "美女", "国际", "趣图", "健康", "特卖", "房产", "小说", "时尚", "历史", "育儿", "直播", "搞笑", "数码", "美食", "养生", "电影", "手机", "旅游", "宠物", "情感", "家居", "教育", "三农", "孕产", "文化"],
+				showData : ["推荐", "热点", "成都", "视频", "社会", "图片", "娱乐", "问答", "科技", "财经", "军事", "段子", "美女", "国际", "趣图", "健康", "特卖", "房产"],
+				maxShow : 25,
+				isExpand : 1,
+				expandOpenIcon : 'widget://res/openIcon.png',
+				expandCloseIcon : 'widget://res/closeIcon.png',
+				showedLable : '我的频道',
+				addLable : '频道推荐'
+			};
+			demo.open(param1, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function setCurrentItem1() {
+			demo.setCurrentItem({
+				index : 5
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function hide1() {
+			demo.hide(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function show1() {
+			demo.show(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function close1() {
+			demo.close(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+	</script>
+</html>

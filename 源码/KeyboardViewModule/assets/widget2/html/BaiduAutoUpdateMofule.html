@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="uiUpdateAction()" >带有UI的更新界面</a>
+				<a class="button" tapmode="active" onclick="updateCheck()" >检测是否有新版本</a>
+				<a class="button" tapmode="active" onclick="updateDownload()" >普通升级下载</a>
+				<a class="button" tapmode="active" onclick="updateDownloadByAs()" >智能升级下载</a>
+				<a class="button" tapmode="active" onclick="updateInstall()">安装APP</a>
+				<a class="button" tapmode="active" onclick="silenceUpdateAction()" >静默更新</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('bdAutoUpdate');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+		//带有UI的更新界面(建议未设计升级 示界面的应用使用，此接口被调用时会进行版本检测，若 有新版本会弹出对话框提示用户。)
+		function uiUpdateAction() {
+			demo.uiUpdateAction(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		//检测是否有新版本
+		function updateCheck() {
+			demo.updateCheck({
+				useHttps : true //true or false
+			}, function(ret, err) {
+				//goUpdateInstall 有安装包，需要调用安装接口
+				//goUpdateDownload 有安装包，需要调用下载接口进行下载
+				//onNoUpdateFound 当前已经是最新版本，无需处理
+				alert(JSON.stringify(ret));
+				if (ret.evenType == 'goUpdateInstall') {
+					_apkPath = ret.installPath;
+				}
+			});
+		}
+
+		//普通升级下载(需要执行updateCheck接口后执行)
+		function updateDownload() {
+			demo.updateDownload(function(ret, err) {
+				//onStart 开始下载
+				//onPercent 下载进度
+				//onDownloadComplete 下载完成后本地的 APK
+				//onStop 停止下载
+				//status==false 下载失败信息
+				if (ret.status) {
+					if (ret.evenType == 'onDownloadComplete') {
+						_apkPath = ret.apkPath;
+					} else if (ret.evenType == 'onPercent') {
+						api.toast({
+							msg : JSON.stringify(ret)
+						});
+					} else {
+						alert(JSON.stringify(ret));
+					}
+				} else {
+					alert(JSON.stringify(ret));
+				}
+			});
+		}
+
+		//智能升级下载(可以不用执行updateCheck接口后进行下载)
+		function updateDownloadByAs() {
+			demo.updateDownloadByAs(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function updateInstall() {
+			alert(_apkPath);
+			if (_apkPath) {
+				demo.updateInstall({
+					apkPath : _apkPath
+				}, function(ret, err) {
+					alert(JSON.stringify(ret));
+				});
+			}
+		}
+
+		//此接口被调用时会先检查本地是否有已下载完成的新版本，如果有则会弹出示框 示用户安装，否则，APP 会在后台进行无感知版本检测并下载。此接口 只支持在 WIFI 环境。
+		function silenceUpdateAction() {
+			demo.silenceUpdateAction({
+				useHttps : false
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+	</script>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="initPageConfig()">页面信息初始化</a>
+				<a class="button" tapmode="active" onclick="readText()">读NFC标签文本数据</a>
+				<a class="button" tapmode="active" onclick="writeText()">写NFC标签文本数据</a>
+			</div>
+		</div>
+	</body>
+	<script>
+		var demo = null;
+		apiready = function() {
+			demo = api.require('nfc');
+		}
+		
+		function initPageConfig(){
+	        demo.initPageConfig({
+	        	isDebug : true,					//开启时，不支持nfc的手机可以打开界面看UI效果
+	        	backgroundColor : '#FF4040',     //页面背景色
+	        	title : {
+	        		text : '请读卡1',     //标题
+	        		color : '#000000',   //标题字体颜色
+	        		background : '#551A8B',      //标题栏背景色
+	        		layoutHeight : 45            //标题栏高度
+	        	},
+	        	center : {
+	        		logo : 'widget://image/timg-2.gif', //图片logo文件路径 支持fs:// widget://
+	        		text : '请将NFC标签或者贴纸靠近手机背面11', //文字说明
+	        		color : '#00EE00',   //文字说明字体颜色
+	        	}
+	        },function(ret, err){
+	        	alert(JSON.stringify(ret) + "  " +JSON.stringify(err));
+	        });
+		}
+		
+		function readText(){
+	        demo.readText(function(ret, err){
+	        	alert(JSON.stringify(ret) + "  " +JSON.stringify(err));
+	        });
+		}
+
+
+		function writeText(){
+	        demo.writeText({
+	        	data : '我是测试数据12345678fffgs'
+	        },function(ret, err){
+	        	alert(JSON.stringify(ret) + "  " +JSON.stringify(err));
+	        });
+		}
+	</script>
+</html>

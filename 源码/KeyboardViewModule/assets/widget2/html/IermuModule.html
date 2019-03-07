@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>title</title>
+		<link rel="stylesheet" type="text/css" href="../css/api.css"/>
+		<style>
+			body {
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: block;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 36px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.6);
+			}
+		</style>
+	</head>
+	<body>
+		<a class="button" tapmode="active" onclick="initErmuSdk()">初始化爱尔目SDK</a>
+		<a class="button" tapmode="active" onclick="addSetupDevListener()">配置摄像机流程监听</a>
+		<a class="button" tapmode="active" onclick="getWifiSSID()">获取当前WIFI的SSID</a>
+		<a class="button" tapmode="active" onclick="scanCam()">扫描摄像机设备</a>
+		<a class="button" tapmode="active" onclick="getScanCamDev()">得到扫描的设备列表</a>
+		<a class="button" tapmode="active" onclick="scanSpecifiedCam()">连接指定的摄像机</a>
+		<a class="button" tapmode="active" onclick="quitScanCam()">退出扫描设备</a>
+		<a class="button" tapmode="active" onclick="quitSetupDev()">退出流程(扫描设备、扫描wifi、配置摄像机流程结束时须调用改接口退出)</a>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<a class="button" tapmode="active" onclick="openPlayerView()">打开直播播放器(羚羊)</a>
+		<a class="button" tapmode="active" onclick="closePlayerView()">关闭直播播放器(羚羊)</a>
+		<a class="button" tapmode="active" onclick="switchMute()">静音开关</a>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<a class="button" tapmode="active" onclick="setOnAudioListener()">语音对讲监听回调</a>
+		<a class="button" tapmode="active" onclick="startLyyAudio()">开始羚羊设备对讲(羚羊)</a>
+		<a class="button" tapmode="active" onclick="stopAudio()">停止羚羊设备对讲(羚羊)</a>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript">
+		var demo;
+		
+		apiready = function() {
+			demo = api.require('iermu');
+		};
+		
+		function initErmuSdk() {
+			api.ajax({
+			    url: 'http://sr.app.yiduosoft.cn/api/iermu/token',
+			    method: 'post',
+			}, function(ret, err) {
+			    if (ret) {
+		      			demo.initErmuSdk({
+							iermuToken : ret.data.token,
+							iermuUid : ret.data.uid
+						}, function(ret, err) {
+							alert("initErmuSdk>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+						});
+			    } else {
+			        api.alert({ msg: JSON.stringify(err) });
+			    }
+			});
+		}
+		
+		
+
+		function addSetupDevListener() {
+			demo.addSetupDevListener(function(ret, err) {
+				if (ret.evenType == 'UpdateProgress') {
+					api.toast({
+						msg : "addSetupDevListener>>" + JSON.stringify(ret) + "  " + JSON.stringify(err)
+					});
+				} else {
+					alert("addSetupDevListener>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+				}
+			});
+		}
+
+		function removeSetupDevListener() {
+			demo.removeSetupDevListener(function(ret, err) {
+				alert("removeSetupDevListener>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function getWifiSSID() {
+			demo.getWifiSSID(function(ret, err) {
+				alert("getWifiSSID>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function scanCam() {
+			demo.scanCam({
+				pwd : '1qaz2wsx3edc',
+			}, function(ret, err) {
+				alert("scanCam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function getScanCamDev() {
+			demo.getScanCamDev(function(ret, err) {
+				alert("getScanCamDev>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function scanSpecifiedCam() {
+			demo.scanSpecifiedCam({
+				devid : '137898407787'
+			}, function(ret, err) {
+				alert("scanSpecifiedCam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function quitScanCam() {
+			demo.quitScanCam(function(ret, err) {
+				alert("quitScanCam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function quitSetupDev() {
+			demo.quitSetupDev(function(ret, err) {
+				alert("quitSetupDev>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function openPlayerView() {
+	
+		    api.ajax({
+			    url: 'http://sr.app.yiduosoft.cn/api/iermu/live',
+			    method: 'post',
+			    data:{values:{"deviceid":"137898407787"}}
+			}, function(ret, err) {
+			    if (ret) {
+			            api.alert({msg:ret.data.url})
+						demo.openPlayerView({
+							rect : {
+								x : 0,
+								y : 0,
+								w : api.frameWidth,
+								h : 200
+							},
+							fixedOn : api.frameName,
+							fixed : true,
+							url : ret.data.url,
+						}, function(ret, err) {
+							alert("openPlayerView>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+						});
+			    } else {
+			        api.alert({ msg: JSON.stringify(err) });
+			    }
+			});
+			
+			
+
+		}
+
+		function closePlayerView() {
+			demo.closePlayerView(function(ret, err) {
+				alert("closePlayerView>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function switchMute() {
+			demo.switchMute(function(ret, err) {
+				alert("switchMute>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function setOnAudioListener() {
+			demo.setOnAudioListener(function(ret, err) {
+				api.toast({
+					msg : "setOnAudioListener>>" + JSON.stringify(ret) + "  " + JSON.stringify(err)
+				});
+			});
+		}
+
+		function startLyyAudio() {
+			demo.startLyyAudio(function(ret, err) {
+				alert("startLyyAudio>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function stopAudio() {
+			demo.stopAudio(function(ret, err) {
+				alert("stopAudio>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+	</script>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<a class="button" tapmode="active" onclick="initSdk()" >
+					初始化sdk
+				</a>
+				<a class="button" tapmode="active" onclick="onPlayStateError()" >
+					娃娃机视频流直播错误监听
+				</a>
+				<a class="button" tapmode="active" onclick="onPlayQuality()" >
+					娃娃机直播流网络质量监听
+				</a>
+				<a class="button" tapmode="active" onclick="onPushLivePlayQuality()" >
+					主播相机预览推流网络质量监听
+				</a>
+				<a class="button" tapmode="active" onclick="onPublishStateUpdate()" >
+					主播推流开启状态监听，开启成功返回播放地址
+				</a>
+				<a class="button" tapmode="active" onclick="loginRoom()" >
+					登录房间
+				</a>
+				<a class="button" tapmode="active" onclick="openView()" >
+					打开娃娃机操作视频流
+				</a>
+				<a class="button" tapmode="active" onclick="closeView()" >
+					关闭娃机操作视频流
+				</a>
+				<a class="button" tapmode="active" onclick="openPlayer()" >
+					观众观看主播
+				</a>
+				<a class="button" tapmode="active" onclick="hideLiveUI()" >
+					隐藏直播UI窗口
+				</a>
+				<a class="button" tapmode="active" onclick="showLiveUI()" >
+					显示直播UI窗口
+				</a>
+				<a class="button" tapmode="active" onclick="switchWawajiCamera()" >
+					切换娃娃机视角
+				</a>
+				<a class="button" tapmode="active" onclick="upMachine()" >
+					上机
+				</a>
+				<a class="button" tapmode="active" onclick="sendCustomCommand()" >
+					发送指令
+				</a>
+				<a class="button" tapmode="active" onclick="onRecvCustomCommand()" >
+					接收指令
+				</a>
+				<a class="button" tapmode="active" onclick="downMachine()" >
+					下机
+				</a>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('zego');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+		function initSdk(){
+	        demo.initSdk({
+	        	//appid:'3177435262',
+	        	//signKey : '166c578bb0b551fdc4d9b7af961f1382c9b62b0f99753ab3c17ec454309328fa',
+	        	appid:'752253254',
+	        	signKey : '51b8a4ea2e3f9e9de573212b71a5fc7d0da89052639a382fa9952d160c5ea307',
+	        	isTestEnv : true,
+	        	userId : 'zhaofeitest',
+	        	userName : 'zhaofei',
+	        },function(ret, err){
+	        	api.toast({  msg: "initSdk >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		
+		
+		function onPlayStateError(){
+	        demo.onPlayStateError(function(ret, err){
+	        	api.toast({  msg: "onPlayStateError >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        	//alert("onPlayStateError >> "+JSON.stringify(ret)+"  "+JSON.stringify(err));
+	        });
+		}
+		
+		function onPlayQuality(){
+	        demo.onPlayQuality(function(ret, err){
+	        	//api.toast({  msg: "onPlayQuality >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		function onPushLivePlayQuality(){
+	        demo.onPushLivePlayQuality(function(ret, err){
+	        	api.toast({  msg: "onPushLivePlayQuality >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		function onPublishStateUpdate(){
+	        demo.onPublishStateUpdate(function(ret, err){
+	        	api.toast({  msg: "onPublishStateUpdate >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		
+		
+		function loginRoom(){
+	        demo.loginRoom({
+	        	//roomID : 'WWJ_ZEGO_12345_54321',
+	        	roomID : 'jikeep_room1',
+	        },function(ret, err){
+	        	api.toast({  msg: "loginRoom >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		function openView(){
+	        demo.openView({
+	        	wawajiRect : {
+					x : 0,
+					y : 0,
+					w : api.frameWidth,
+					h : api.frameHeight-200
+				},
+				liveRect : {
+					x : 0,
+					y : 0,
+					w : api.frameWidth/3,
+					h : api.frameHeight/3
+				},
+				fixedOn : api.frameName,
+				fixed : true,
+				//streamID1 : 'WWJ_ZEGO_STREAM_12345_54321',
+				//streamID2 : 'WWJ_ZEGO_STREAM_12345_54321_2',
+				streamID1 : 'jikeep_room1-stream1',
+				streamID2 : 'jikeep_room1-stream2',
+				//liveStreamId : 'WWJ_ZEGO_STREAM_12345_54321_2',
+				liveHomePic : 'widget://image/uz_splash_bg.png',
+				viewMode : 3
+	        },function(ret, err){
+	        	api.toast({  msg: "openView >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		function closeView(){
+	        demo.closeView(function(ret, err){
+	        	api.toast({  msg: "closeView >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		function openPlayer(){
+	        demo.openPlayer({
+	        	streamID : 'WWJ_ZEGO_STREAM_12345_54321'
+	        },function(ret, err){
+	        	api.toast({  msg: "openPlayer >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		function hideLiveUI(){
+	        demo.hideLiveUI(function(ret, err){
+	        	api.toast({  msg: "hideLiveUI >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		function showLiveUI(){
+	        demo.showLiveUI(function(ret, err){
+	        	api.toast({  msg: "showLiveUI >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		
+		function switchWawajiCamera(){
+	        demo.switchWawajiCamera(function(ret, err){
+	        	//api.toast({  msg: "switchWawajiCamera >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+	    
+	    
+	    function upMachine(){
+	        demo.upMachine({
+	        	streamID : 'stream_zhaofeitest',
+	        	streamTitle : 'title_stream_zhaofeitest'
+	        },function(ret, err){
+	        	api.toast({  msg: "upMachine >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		function sendCustomCommand(){
+	        demo.sendCustomCommand({
+	        	Command : {
+	        		key1 : 'key1',
+	        		key2 : 'key2',
+	        	}
+	        },function(ret, err){
+	        	api.toast({  msg: "sendCustomCommand >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		function onRecvCustomCommand(){
+	        demo.onRecvCustomCommand(function(ret, err){
+	        	api.toast({  msg: "onRecvCustomCommand >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+		
+		
+		function downMachine(){
+	        demo.downMachine(function(ret, err){
+	        	api.toast({  msg: "downMachine >> "+JSON.stringify(ret)+"  "+JSON.stringify(err)  });
+	        });
+		}
+	</script>
+</html>

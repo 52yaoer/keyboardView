@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+			
+			.input1 {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+				<a class="button" tapmode="active" onclick="addPlayerListener()" >推流状态监听</a> 
+				<a class="button" tapmode="active" onclick="openPublisher()" >打开推流预览</a> 
+				<a class="button" tapmode="active" onclick="hidePublisher()" >隐藏推流预览</a>   
+				<a class="button" tapmode="active" onclick="showPublisher()" >显示推流预览</a>   
+				<a class="button" tapmode="active" onclick="closePublisher()" >关闭推流预览</a>   
+				<a class="button" tapmode="active" onclick="startPush()" >开始推流</a>
+                <a class="button" tapmode="active" onclick="stopPush()" >停止推流</a>
+                <a class="button" tapmode="active" onclick="switchMute01()" >设置静音</a>
+				<a class="button" tapmode="active" onclick="switchMute02()" >设置不静音</a>
+				<a class="button" tapmode="active" onclick="saveImage()" >保存快照</a>  
+				<a class="button" tapmode="active" onclick="startRecorder()" >开始录像</a>  
+				<a class="button" tapmode="active" onclick="stopRecorder()" >停止录像</a>
+				<a class="button" tapmode="active" onclick="switchCamera()" >切换摄像头</a>
+				
+				<a class="button" tapmode="active" onclick="switchMirror01()" >开镜像</a>
+				<a class="button" tapmode="active" onclick="switchMirror02()" >关镜像</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script>
+		var demo = null;
+		apiready = function(){
+	    	demo = api.require('daniuPublish');
+	    }
+	    
+		function openPublisher(){
+	        demo.openPublisher({
+	        	rect : {
+	        		x : 10,
+	        		y : 10,
+	        		w : 300,
+	        		h : 200
+	        	},
+	        	playBuffer : 100,// 默认200ms
+	        	isLowLatency : false,//超低延时，默认fasle:不开启 true:开启
+	        	isFastStartup : true,// 是否秒开, 默认true:秒开 false:取消秒开
+	        	isMute : false, //是否静音 默认false:取消静音 true:静音
+	        	isHardwareDecoder : false,//是否硬解 默认false:软解 true:硬解
+	        	fixedOn : api.frameName,
+	        	fixed : true
+	        }, function(ret, err){
+	        	api.toast({
+	                msg:" openPublisher "+JSON.stringify(ret)+" "+JSON.stringify(err)
+                });
+	        });
+		}
+		
+		function hidePublisher(){
+			demo.hidePublisher();
+		}
+		
+		function showPublisher(){
+			demo.showPublisher();
+		}
+		
+		function closePublisher(){
+			demo.closePublisher();
+		}
+		
+		function startPush(){
+			demo.startPush({
+				publishURL : "rtmp://player.daniulive.com:1935/hls/stream286526",
+			}, function(ret, err){
+	        	api.toast({
+	                msg:" startPush "+JSON.stringify(ret)+" "+JSON.stringify(err)
+                });
+	        });
+		}
+
+		function stopPush(){
+			demo.stopPush(function(ret, err){
+	        	api.toast({
+	                msg:" stopPush "+JSON.stringify(ret)+" "+JSON.stringify(err)
+                });
+	        });
+		}
+	    
+		
+		function addPlayerListener(){
+			demo.addPlayerListener(function(ret, err){
+	        	api.toast({
+	                msg:" addPlayerListener "+JSON.stringify(ret)+" "+JSON.stringify(err)
+                });
+	        });
+		}
+		
+		function switchMute01() {
+			demo.switchMute({
+				isMute : true
+			}, function(ret, err) {
+				api.toast({
+					msg : " switchMute " + JSON.stringify(ret) + " " + JSON.stringify(err)
+				});
+			});
+		}
+
+		function switchMute02() {
+			demo.switchMute({
+				isMute : false
+			}, function(ret, err) {
+				api.toast({
+					msg : " switchMute " + JSON.stringify(ret) + " " + JSON.stringify(err)
+				});
+			});
+		}
+		
+		
+		
+		function switchMirror01() {
+			demo.switchMirror({
+				isMirror : true
+			}, function(ret, err) {
+				api.toast({
+					msg : " switchMirror " + JSON.stringify(ret) + " " + JSON.stringify(err)
+				});
+			});
+		}
+
+		function switchMirror02() {
+			demo.switchMirror({
+				isMirror : false
+			}, function(ret, err) {
+				api.toast({
+					msg : " switchMirror " + JSON.stringify(ret) + " " + JSON.stringify(err)
+				});
+			});
+		}
+		
+		
+		function saveImage(){
+			demo.saveImage(function(ret, err){
+	        	api.toast({
+	                msg:" saveImage "+JSON.stringify(ret)+" "+JSON.stringify(err)
+                });
+	        });
+		}
+
+		function startRecorder(){
+			demo.startRecorder();
+		}
+
+		function stopRecorder(){
+			demo.stopRecorder();
+		}
+		
+		function switchCamera(){
+			demo.switchCamera();
+		}
+		
+	</script>
+</html>

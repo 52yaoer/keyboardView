@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="initBle()" >初始化蓝牙</a>
+				<a class="button" tapmode="active" onclick="getBondedDevices()" >获取已经配对的设备</a>
+				<a class="button" tapmode="active" onclick="cleanDevices()" >清除已经配对的设备</a>
+				<a class="button" tapmode="active" onclick="startDiscovery()" >扫描蓝牙</a>
+				<a class="button" tapmode="active" onclick="initBtReadClient()" >初始化身份证读卡设备</a>
+				<a class="button" tapmode="active" onclick="connectBt()" >连接蓝牙设备</a>
+				<a class="button" tapmode="active" onclick="readCard()" >读取身份证信息</a>
+				<a class="button" tapmode="active" onclick="disconnectBt()" >断开蓝牙设备</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('kaerRead');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+			demo.addEventListener(function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		function initBle() {
+			demo.initBle(function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function getBondedDevices() {
+			demo.getBondedDevices(function(ret, err) {
+				//alert(JSON.stringify(ret) +"  "+ JSON.stringify(err));
+			});
+		}
+
+		function cleanDevices() {
+			demo.cleanDevices(function(ret, err) {
+				//alert(JSON.stringify(ret) +"  "+ JSON.stringify(err));
+			});
+		}
+
+		function startDiscovery() {
+			demo.startDiscovery(function(ret, err) {
+				//alert(JSON.stringify(ret) +"  "+ JSON.stringify(err));
+			});
+		}
+
+		function initBtReadClient() {
+			demo.initBtReadClient({
+				ip : '115.28.2.173',
+				port : 7443,
+				account : 'admin',
+				password : 'ad2951cab072dd32c620182534b07564' //md5加密后的值
+			}, function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function connectBt() {
+			demo.connectBt(function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function readCard() {
+			demo.readCard({
+				protocolType : 0 //0:移动协议 1:联通协议
+			}, function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function disconnectBt() {
+			demo.disconnectBt(function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+	</script>
+</html>

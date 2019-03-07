@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="uploadMp4File()">上传视频到腾讯云</a>
+				<a class="button" tapmode="active" onclick="openUIMediaScanner()">打开相册</a>
+				<a class="button" tapmode="active" onclick="uploadFile()">上传视频</a>
+				<a class="button" tapmode="active" onclick="cancleUpload()">取消上传</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('tencentOSS');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+		
+		var _signature  = "tRsPCx6pnvXuTh25r+ZQ3DrsjXpjbGFzc0lkPTQwODkzOCZzZWNyZXRJZD1BS0lEVHNCSkcxMDBDNHFSc0NvUkl4Yzl4ZUFWZWliSlB2WEsmaXNUcmFuc2NvZGU9MSZpc1NjcmVlbnNob3Q9MSZjdXJyZW50VGltZVN0YW1wPTE1Mjc1NTgxNDAmZXhwaXJlVGltZT0xNTI3NjQ0NTQwJnJhbmRvbT02NTE3ODkwMjE=";
+		
+		function uploadMp4File() {
+			demo.uploadMp4File({
+				signature :  _signature, //签名(必输)  signature计算规则可参考 https://www.qcloud.com/document/product/266/9221
+				videoPath : 'widget://res/test1.mp4', //待上传视频路径(必输)
+				coverImagePath : '', //视频封面(可选)
+				customKey : 'customID'
+			}, function(ret, err) {
+				if (ret.status) {//Progress|Complete
+					if (ret.evenType == 'Progress') {
+						api.toast({
+							msg : JSON.stringify(ret) + " " + JSON.stringify(err)
+						});
+					} else if (ret.evenType == 'Complete') {
+						//					andoird ->> retCode
+						//						0	NO_ERROR	上传成功
+						//						1001	ERR_UGC_REQUEST_FAILED	请求上传失败，通常是客户端签名过期或者非法，需要 App 重新申请签名
+						//						1002	ERR_UGC_PARSE_FAILED	请求信息解析失败
+						//						1003	ERR_UPLOAD_VIDEO_FAILED	上传视频失败
+						//						1004	ERR_UPLOAD_COVER_FAILED	上传封面失败
+						//						1005	ERR_UGC_FINISH_REQUEST_FAILED	结束上传请求失败
+						//						1006	ERR_UGC_FINISH_RESPONSE_FAILED	结束上传响应错误
+						//						1007	ERR_CLIENT_BUSY	客户端正忙(对象无法处理更多请求)
+						//						1008	ERR_FILE_NOEXIT	上传文件不存在
+						//						1009	ERR_UGC_PUBLISHING	视频正在上传中
+						//						1010	ERR_UGC_INVALID_PARAM	上传参数为空
+						//						1012	ERR_UGC_INVALID_SIGNATURE	视频上传 signature 为空
+						//						1013	ERR_UGC_INVALID_VIDOPATH	视频文件的路径为空
+						//						1014	ERR_UGC_INVALID_VIDEO_FILE	当前路径下视频文件不存在
+						//						1015	ERR_UGC_FILE_NAME	视频上传文件名太长（超过 40）或含有特殊字符
+						//						1016	ERR_UGC_INVALID_COVER_PATH	视频文件封面路径不对，文件不存在
+						//					iOS >> retCode
+						//						0	TVC_OK	上传成功
+						//						1001	TVC_ERR_UGC_REQUEST_FAILED	请求上传失败，通常是客户端签名过期或者非法，需要 app 重新申请签名
+						//						1002	TVC_ERR_UGC_PARSE_FAILED	请求信息解析失败
+						//						1003	TVC_ERR_VIDEO_UPLOAD_FAILED	上传视频失败
+						//						1004	TVC_ERR_COVER_UPLOAD_FAILED	上传封面失败
+						//						1005	TVC_ERR_UGC_FINISH_REQ_FAILED	结束上传请求失败
+						//						1006	TVC_ERR_UGC_FINISH_RSP_FAILED	结束上传响应错误
+						//						1008	TVC_ERR_FILE_NOT_EXIST	上传文件不存在
+						//						1012	TVC_ERR_INVALID_SIGNATURE	视频上传 signature 为空
+						//						1013	TVC_ERR_INVALID_VIDEOPATH	视频文件的路径为空
+						//						1017	TVC_ERR_USER_CANCLE	用户调用取消上传
+						alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+					}
+				} else {
+					api.toast({
+						msg : JSON.stringify(ret) + " " + JSON.stringify(err)
+					});
+				}
+			});
+		}
+
+		var tempPath;
+		function openUIMediaScanner() {
+			var UIMediaScanner = api.require('UIMediaScanner');
+			UIMediaScanner.open({
+				type : 'video',
+				column : 4,
+				classify : true,
+				max : 1,
+				sort : {
+					key : 'time',
+					order : 'desc'
+				},
+				texts : {
+					stateText : '已选择*项',
+					cancelText : '取消',
+					finishText : '完成'
+				},
+				styles : {
+					bg : '#fff',
+					mark : {
+						icon : '',
+						position : 'bottom_left',
+						size : 20
+					},
+					nav : {
+						bg : '#eee',
+						stateColor : '#000',
+						stateSize : 18,
+						cancelBg : 'rgba(0,0,0,0)',
+						cancelColor : '#000',
+						cancelSize : 18,
+						finishBg : 'rgba(0,0,0,0)',
+						finishColor : '#000',
+						finishSize : 18
+					}
+				},
+				scrollToBottom : {
+					intervalTime : 3,
+					anim : true
+				},
+				exchange : true,
+				rotation : true
+			}, function(ret) {
+				if (ret.eventType == 'confirm') {
+					//alert(JSON.stringify(ret));
+					//tempPath = ret.list[0].path;
+					UIMediaScanner.transPath({
+						path :   ret.list[0].path
+					}, function(ret1, err1) {
+						if (ret1) {
+							//alert(JSON.stringify(ret));
+							tempPath = ret1.path;
+						} else {
+							alert(JSON.stringify(err));
+						}
+					});
+				}
+			});
+		}
+
+		function uploadFile() {
+			alert(tempPath);
+			demo.uploadMp4File({
+				signature :  _signature, //签名(必输)  signature计算规则可参考 https://www.qcloud.com/document/product/266/9221
+				videoPath : tempPath, //待上传视频路径(必输)
+				coverImagePath : '', //视频封面(可选)
+				customKey : 'customID'
+			}, function(ret, err) {
+				//				alert(JSON.stringify(ret));
+				if (ret.status) {//Progress|Complete
+					if (ret.evenType == 'Progress') {
+						//						alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+						api.toast({
+							msg : JSON.stringify(ret) + " " + JSON.stringify(err)
+						});
+					} else if (ret.evenType == 'Complete') {
+						//					andoird ->> retCode
+						//						0	NO_ERROR	上传成功
+						//						1001	ERR_UGC_REQUEST_FAILED	请求上传失败，通常是客户端签名过期或者非法，需要 App 重新申请签名
+						//						1002	ERR_UGC_PARSE_FAILED	请求信息解析失败
+						//						1003	ERR_UPLOAD_VIDEO_FAILED	上传视频失败
+						//						1004	ERR_UPLOAD_COVER_FAILED	上传封面失败
+						//						1005	ERR_UGC_FINISH_REQUEST_FAILED	结束上传请求失败
+						//						1006	ERR_UGC_FINISH_RESPONSE_FAILED	结束上传响应错误
+						//						1007	ERR_CLIENT_BUSY	客户端正忙(对象无法处理更多请求)
+						//						1008	ERR_FILE_NOEXIT	上传文件不存在
+						//						1009	ERR_UGC_PUBLISHING	视频正在上传中
+						//						1010	ERR_UGC_INVALID_PARAM	上传参数为空
+						//						1012	ERR_UGC_INVALID_SIGNATURE	视频上传 signature 为空
+						//						1013	ERR_UGC_INVALID_VIDOPATH	视频文件的路径为空
+						//						1014	ERR_UGC_INVALID_VIDEO_FILE	当前路径下视频文件不存在
+						//						1015	ERR_UGC_FILE_NAME	视频上传文件名太长（超过 40）或含有特殊字符
+						//						1016	ERR_UGC_INVALID_COVER_PATH	视频文件封面路径不对，文件不存在
+						//					iOS >> retCode
+						//						0	TVC_OK	上传成功
+						//						1001	TVC_ERR_UGC_REQUEST_FAILED	请求上传失败，通常是客户端签名过期或者非法，需要 app 重新申请签名
+						//						1002	TVC_ERR_UGC_PARSE_FAILED	请求信息解析失败
+						//						1003	TVC_ERR_VIDEO_UPLOAD_FAILED	上传视频失败
+						//						1004	TVC_ERR_COVER_UPLOAD_FAILED	上传封面失败
+						//						1005	TVC_ERR_UGC_FINISH_REQ_FAILED	结束上传请求失败
+						//						1006	TVC_ERR_UGC_FINISH_RSP_FAILED	结束上传响应错误
+						//						1008	TVC_ERR_FILE_NOT_EXIST	上传文件不存在
+						//						1012	TVC_ERR_INVALID_SIGNATURE	视频上传 signature 为空
+						//						1013	TVC_ERR_INVALID_VIDEOPATH	视频文件的路径为空
+						//						1017	TVC_ERR_USER_CANCLE	用户调用取消上传
+						alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+					}
+				} else {
+					api.toast({
+						msg : JSON.stringify(ret) + " " + JSON.stringify(err)
+					});
+				}
+			});
+		}
+
+		function cancleUpload() {
+			demo.cancleUpload(function(ret, err) {
+				api.toast({
+					msg : JSON.stringify(ret) + " " + JSON.stringify(err)
+				});
+			});
+		}
+	</script>
+</html>

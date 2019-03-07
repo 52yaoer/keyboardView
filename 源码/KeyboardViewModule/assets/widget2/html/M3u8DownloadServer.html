@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="addEventListener1()" >下载进度监听</a>
+				<a class="button" tapmode="active" onclick="start1()" >开始下载1</a>
+				<a class="button" tapmode="active" onclick="pause1()" >暂停下载1</a>
+				<a class="button" tapmode="active" onclick="isDownloadFinish1()" >是否下载完成1</a>
+				<a class="button" tapmode="active" onclick="start2()" >开始下载2</a>
+				<a class="button" tapmode="active" onclick="pause2()" >暂停下载2</a>
+				<a class="button" tapmode="active" onclick="isDownloadFinish2()" >是否下载完成2</a>
+				<a class="button" tapmode="active" onclick="getCacheSize()">获取缓存大小</a>
+				<a class="button" tapmode="active" onclick="clearCache()">清空缓存</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script>
+		var demo;
+		function apiready() {
+			demo = api.require('m3u8CacheServer');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+
+		function addEventListener1() {
+			demo.addEventListener(function(ret, err) {
+				//ret.data.state 0:默认状态 -1:下载排队 1:下载准备中 2:下载中 3:下载完成 4:下载出错 5:下载暂停 6:空间不足
+				api.toast({
+					msg : JSON.stringify(ret)
+				});
+				console.log(JSON.stringify(ret));
+			});
+		}
+	//http://ogn0m4it0.bkt.clouddn.com/58IzAY_GglrObBBbbD98wrHIbLk=/llhpmYRGVWfZL8dyCPXwCwKovI9R
+		function start1() {
+			//			alert(demo);
+			demo.start({
+				url : 'http://kino3.xalhar.net:2100/20180625/HZGkTWWo/500kb/hls/index.m3u8'
+			}, function(ret, err) {
+				alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+			});
+		}
+
+		function pause1() {
+			demo.pause({
+				url : 'http://kino3.xalhar.net:2100/20180625/HZGkTWWo/500kb/hls/index.m3u8'
+			}, function(ret, err) {
+				alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+			});
+		}
+
+		function isDownloadFinish1() {
+			demo.isDownloadFinish({
+				url : 'http://kino3.xalhar.net:2100/20180625/HZGkTWWo/500kb/hls/index.m3u8'
+			}, function(ret, err) {
+				alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+				if (ret.status) {
+					playVideo(ret.localUrl);
+				}
+			});
+		}
+
+		function start2() {
+			demo.start({
+				url : 'http://kino3.xalhar.net:2100/20180625/HZGkTWWo/index.m3u8'
+			}, function(ret, err) {
+				alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+			});
+		}
+
+		function pause2() {
+			demo.pause({
+				url : 'http://kino3.xalhar.net:2100/20180625/HZGkTWWo/index.m3u8'
+			}, function(ret, err) {
+				alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+			});
+		}
+
+		function isDownloadFinish2() {
+			demo.isDownloadFinish({
+				url : 'http://kino3.xalhar.net:2100/20180625/HZGkTWWo/index.m3u8'
+			}, function(ret, err) {
+				alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+				if (ret.status) {
+					playVideo(ret.localUrl);
+				}
+			});
+		}
+
+		function getCacheSize() {
+			demo.getCacheSize({
+				url : 'http://kino3.xalhar.net:2100/20180625/HZGkTWWo/index.m3u8'//不传则获取所有m3u8缓存
+			},function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function clearCache() {
+			demo.clearCache({
+				url : 'http://kino3.xalhar.net:2100/20180625/HZGkTWWo/index.m3u8'//不传则删除所有m3u8缓存
+			},function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function playVideo(_url) {
+			var demo1 = api.require('playModule');
+			demo1.play({
+				title : "视频测试",
+				url : _url,
+				defaultBtn : true,
+				enableFull : true,
+				isTopView : true,
+				isFullBtn : true,
+				isBackBtn : true,
+//				scalingMode : 1, //1 无缩放 2 适应大小模式 3 充满可视范围，可能会被裁剪 4 缩放到充满视图
+				fullscreenMode : 'LANDSCAPE', //设置全屏按钮控制全屏显示模式是横屏还是竖屏 竖屏:PORTRAIT ; 横屏:LANDSCAPE
+				isShowProcessView : true, //是否显示进度条 (显示:true ; 不显示:false)
+				isShowTimeLable : true, //是否显示播放时间 显示:true ; 不显示:false
+				isLive : false, //是否直播视频源 (直播：true；点播：false)
+				isOpenGesture : true, //是否开启手势控制音量，亮度和进度，默认开启手势控制，true为开启false为关闭
+				isAutoPlay : true, //是否自动播放 默认:true  true为开启false为关闭
+				isLoop : false,     //是否循环播放  默认:false true为开启false为关闭
+			}, function(ret, err) {
+			});
+		}
+	</script>
+</html>

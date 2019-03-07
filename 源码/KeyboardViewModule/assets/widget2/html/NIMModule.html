@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="login()" >登录</a>
+				<a class="button" tapmode="active" onclick="logout()" >退出</a>
+				<a class="button" tapmode="active" onclick="onKick()" >被踢的监听</a>
+				<a class="button" tapmode="active" onclick="onMultiLoginClientsChanged()" >多端登录监听</a>
+				<a class="button" tapmode="active" onclick="willSendIMMessage()" >即将发送消息监听</a><!--update -->
+				<a class="button" tapmode="active" onclick="onSendMessageWithProgress()" >消息发送进度监听(文本消息会没有这个)</a>
+				<a class="button" tapmode="active" onclick="onRecvIMMessages()" >收到新消息监听</a><!--update -->
+				<a class="button" tapmode="active" onclick="allRecentSession()" >获取最近会话</a>
+				<a class="button" tapmode="active" onclick="fetchMessageHistory()" >获取云端消息记录</a>
+				<br/>
+				<a class="button" tapmode="active" onclick="sendText()" >发送文本消息及表情</a>
+				<a class="button" tapmode="active" onclick="sendImage()" >发送图片</a>
+				<a class="button" tapmode="active" onclick="sendLocationMsg()" >发送地理位置</a>
+				<a class="button" tapmode="active" onclick="sendAudio()" >发送音频</a>
+				<a class="button" tapmode="active" onclick="sendVideo()" >发送视频</a>
+				<a class="button" tapmode="active" onclick="sendFile()" >发送文件</a>
+				<br/>
+				<a class="button" tapmode="active" onclick="switchAudioOutputDevice()" >切换音频的输出设备</a>
+				<a class="button" tapmode="active" onclick="isPlaying()" >判断是否正在播放音频</a>
+				<a class="button" tapmode="active" onclick="playAudio()" >播放音频</a>
+				<a class="button" tapmode="active" onclick="stopPlay()" >停止播放音频</a>
+				<br/>
+				<a class="button" tapmode="active" onclick="isRecording()" >判断是否正在录制音频</a>
+				<a class="button" tapmode="active" onclick="recordAudioForDuration()" >录音</a>
+				<a class="button" tapmode="active" onclick="cancelRecord()" >取消录音</a>
+				<a class="button" tapmode="active" onclick="stopRecord()" >停止录制音频</a>
+				<br/>
+				<a class="button" tapmode="active" onclick="onIMTeamRemoved()" >群组移除监听</a><!--update -->
+				<a class="button" tapmode="active" onclick="onIMTeamUpdated()" >群组更新监听</a><!--update -->
+				<a class="button" tapmode="active" onclick="onIMTeamMemberChanged()" >群成员改变监听</a><!--update -->
+				<a class="button" tapmode="active" onclick="allMyTeams()" >获取我的所有群组</a>
+				<a class="button" tapmode="active" onclick="teamById()" >本地获取群组信息</a>
+				<a class="button" tapmode="active" onclick="fetchTeamInfo()" >远程获取群组信息</a><!--update -->
+				<a class="button" tapmode="active" onclick="createTeam()" >创建群组</a>
+				<a class="button" tapmode="active" onclick="addUsers()" >邀请用户入群</a>
+				<a class="button" tapmode="active" onclick="acceptInviteWithTeam()" >同意群邀请(仅限高级群)</a>
+				<a class="button" tapmode="active" onclick="rejectInviteWithTeam()" >拒绝群邀请(仅限高级群)</a>
+				<a class="button" tapmode="active" onclick="applyToTeam()" >用户主动申请加群</a>
+				<a class="button" tapmode="active" onclick="passApplyToTeam()" >通过申请(仅限高级群)</a>
+				<a class="button" tapmode="active" onclick="rejectApplyToTeam()" >拒绝申请(仅限高级群)</a>
+				<a class="button" tapmode="active" onclick="updateTeamName()" >修改群名称</a>
+				<a class="button" tapmode="active" onclick="updateTeamIntro()" >修改群介绍</a>
+				<a class="button" tapmode="active" onclick="updateTeamAnnouncement()" >修改群公告</a>
+				<a class="button" tapmode="active" onclick="updateTeamJoinMode()" >修改群验证方式</a>
+				<a class="button" tapmode="active" onclick="addManagersToTeam()" >提升管理员(仅限高级群)</a>
+				<a class="button" tapmode="active" onclick="removeManagersFromTeam()" >移除管理员(仅限高级群)</a>
+				<a class="button" tapmode="active" onclick="transferManagerWithTeam()" >转让群(仅限高级群)</a>
+				<a class="button" tapmode="active" onclick="fetchTeamMembers()" >获取群成员</a>
+				<a class="button" tapmode="active" onclick="quitTeam()" >用户退群</a>
+				<a class="button" tapmode="active" onclick="kickUsers()" >踢出用户</a>
+				<a class="button" tapmode="active" onclick="dismissTeam()" >解散群</a>
+				<a class="button" tapmode="active" onclick="updateNotifyStateForTeam()" >修改群消息通知状态 (关闭群消息提醒)</a>
+				<br/>
+				<a class="button" tapmode="active" onclick="onIMSystemMessageRecieved()" >内置系统通知监听</a><!--update -->
+				<a class="button" tapmode="active" onclick="fetchSystemNotifications()" >获取本地存储的内置系统通知</a>
+				<a class="button" tapmode="active" onclick="allNotificationsUnreadCount()" >获取本地存储的内置系统未读数</a>
+				<a class="button" tapmode="active" onclick="deleteAllNotifications()" >删除本地存储的全部内置系统通知</a>
+				<a class="button" tapmode="active" onclick="markAllNotificationsAsRead()" >标记本地存储的全部内置系统通知为已读</a>
+				<br/>
+				<a class="button" tapmode="active" onclick="onUserInfoUpdate()" >用户个人信息发生变化监听</a>
+				<a class="button" tapmode="active" onclick="onBlackListChanged()" >黑名单列表发生变化监听</a><!--add -->
+				<a class="button" tapmode="active" onclick="userInfo()" >获取用户资料</a>
+				<a class="button" tapmode="active" onclick="fetchUserInfos()" >获取服务器用户资料</a>
+				<a class="button" tapmode="active" onclick="updateMyUserInfo()" >更新当前用户信息</a>
+				<br/>
+				<a class="button" tapmode="active" onclick="myFriends()" >获取好友列表</a>
+				<a class="button" tapmode="active" onclick="requestFriend()" >好友请求</a>
+				<a class="button" tapmode="active" onclick="deleteFriend()" >删除好友</a>
+				<a class="button" tapmode="active" onclick="myBlackList()" >获取黑名单成员列表</a>
+				<a class="button" tapmode="active" onclick="addToBlackList()" >添加用户到黑名单</a>
+				<a class="button" tapmode="active" onclick="removeFromBlackBlackList()" >将用户移除黑名单</a>
+				<a class="button" tapmode="active" onclick="isUserInBlackList()" >判断某用户是否在自己的黑名单中</a>
+				<a class="button" tapmode="active" onclick="myMuteUserList()" >获取静音成员列表</a>
+				<a class="button" tapmode="active" onclick="updateNotifyStateForUser()" >设置消息提醒</a>
+				<a class="button" tapmode="active" onclick="notifyForNewMsgForUser()" >判断是否需要消息通知</a>
+				<br/>
+				<a class="button" tapmode="active" onclick="onChatRoomStatusChanged()" >聊天室在线状态变化的监听</a>
+				<a class="button" tapmode="active" onclick="onChatRoomKickOutEvent()" >被踢出聊天室的监听</a>
+				<a class="button" tapmode="active" onclick="enterChatRoom()" >用户加入聊天室</a>
+				<a class="button" tapmode="active" onclick="exitChatRoom()" >用户退出聊天室</a>
+				<a class="button" tapmode="active" onclick="getChatRoomHistoryMsg()" >获取聊天室历史消息</a>
+				<a class="button" tapmode="active" onclick="getChatRoomInfo()" >获取聊天室基本信息</a>
+				<a class="button" tapmode="active" onclick="getChatRoomMembers()" >获取聊天室成员</a>
+				<a class="button" tapmode="active" onclick="getChatRoomMembersByIds()" >批量获取指定成员在聊天室中的信息</a>
+				<a class="button" tapmode="active" onclick="addUserToBlackList()" >加入/移出黑名单</a>
+				<a class="button" tapmode="active" onclick="muteUser()" >加入用户到禁言名单/取消某用户的禁言</a>
+				<a class="button" tapmode="active" onclick="setAdmin()" >设置/取消管理员</a>
+				<a class="button" tapmode="active" onclick="setNormal()" >设置/移除普通成员</a>
+				<a class="button" tapmode="active" onclick="kickMemberFromChatRoom()" >从聊天室中移除某个用户</a>
+				<br/>
+				<a class="button" tapmode="active" onclick="startCall()" >发起通话(主叫方)</a>
+				<a class="button" tapmode="active" onclick="onCallReceive()" >被叫收到呼叫监听(被叫方)</a>
+				<a class="button" tapmode="active" onclick="responseCall()" >被叫响应呼叫(被叫方)</a>
+				<a class="button" tapmode="active" onclick="onCallResponse()" >主叫收到被叫响应监听(主叫方)</a>
+				<a class="button" tapmode="active" onclick="onCallCallEstablished()" >点对点通话建立成功监听</a>
+				<a class="button" tapmode="active" onclick="onCallCallDisconnected()" >通话异常断开监听</a>
+				<a class="button" tapmode="active" onclick="callControl()" >发送网络通话的控制信息(发起方)</a>
+				<a class="button" tapmode="active" onclick="onCallControl()" >收到对方网络通话控制信息监听(接收方)</a>
+				<a class="button" tapmode="active" onclick="callHangup()" >挂断通话</a>
+				<a class="button" tapmode="active" onclick="onCallHangup()" >对方挂断电话监听</a>
+				
+				<a class="button" tapmode="active" onclick="currentCallID()" >获取正在进行中的网络通话call id</a>
+				<a class="button" tapmode="active" onclick="onCallNetStatus()" >当前通话网络状态监听</a>
+				
+				<a class="button" tapmode="active" onclick="initCallRemoteView()" >初始化视频通话界面</a>
+				<a class="button" tapmode="active" onclick="removeCallRemoteView()" >移除视频通话界面</a>
+				<a class="button" tapmode="active" onclick="setCallMute()" >设置网络通话静音模式</a>
+				<a class="button" tapmode="active" onclick="setCallSpeaker()" >设置网络通话扬声器模式</a>
+				<a class="button" tapmode="active" onclick="switchCallCamera()" >切换网络通话摄像头</a>
+				<a class="button" tapmode="active" onclick="switchCallCameraFlash()" >切换闪光灯开关</a>
+				
+				<a class="button" tapmode="active" onclick="startNetDetect()" >开始网络探测任务</a>
+				<a class="button" tapmode="active" onclick="stopNetDetect()" >停止网络探测任务</a>
+			</div>
+		</div>
+	</body>
+	<script>
+		var mFilePath = 'widget://res/bandari.mp3';
+		var demo = null;
+		var _taskId ;
+		apiready = function() {
+			demo = api.require('nim');
+		}
+		
+		function switchCallCamera(){
+			demo.switchCallCamera(function(ret, err) {
+				alert("switchCallCamera>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function switchCallCameraFlash(){
+			demo.switchCallCameraFlash(function(ret, err) {
+				alert("switchCallCameraFlash>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function stopNetDetect(){
+			demo.stopNetDetect({
+				taskId : _taskId //需要停止的任务的 id
+			}, function(ret, err) {
+				alert("stopNetDetect>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function startNetDetect(){
+			demo.startNetDetect(function(ret, err) {//return taskId
+				alert("startNetDetect>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+				_taskId = ret.taskId;
+			});
+		}
+		
+		function setCallSpeaker(){
+			demo.setCallSpeaker({
+				useSpeaker : true //是否开启扬声器
+			}, function(ret, err) {
+				alert("setCallSpeaker>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function setCallMute(){
+			demo.setCallMute({
+				mute : true //是否开启静音
+			}, function(ret, err) {
+				alert("setCallMute>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function removeCallRemoteView(){
+			demo.removeCallRemoteView(function(ret, err) {
+				alert("removeCallRemoteView>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function initCallRemoteView(){
+			demo.initCallRemoteView({
+				remoteRect : {
+					x : 0,
+					y : 0,
+					w : api.frameWidth,
+					h : api.frameHeight
+				},
+				localRect : {
+					x : 0,
+					y : 0,
+					w : api.frameWidth/3,
+					h : api.frameHeight/3
+				},
+				fixedOn : api.frameName,
+				fixed : true
+			}, function(ret, err) {
+				alert("initCallRemoteView>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function onCallNetStatus(){
+			demo.onCallNetStatus( function(ret, err) {
+				alert("onCallNetStatus>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function currentCallID(){
+			demo.currentCallID( function(ret, err) {
+				alert("currentCallID>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function onCallHangup(){
+			demo.onCallHangup( function(ret, err) {
+				alert("onCallHangup>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function callHangup(){
+			demo.callHangup({
+				callID : '',    //call id
+			}, function(ret, err) {
+				alert("callHangup>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function onCallControl(){
+			demo.onCallControl( function(ret, err) {
+				alert("onCallControl>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function callControl(){
+			demo.callControl({
+				callID : '',    //call id
+				type : 1       //1:开启了音频 2:关闭了音频 3:开启了视频 4:关闭了视频 5:切换到视频模式 6:同意切换到视频模式 7:拒绝切换到视频模式
+				               //8:切换到音频模式 9:占线 10:没有可用摄像头(仅ios) 11:应用切换到了后台(仅ios) 12:收到呼叫请求的反馈，通常用于被叫告诉主叫可以播放回铃音了
+				               //13:开始录制 14:结束录制
+			}, function(ret, err) {
+				alert("callControl>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function onCallCallDisconnected(){
+			demo.onCallCallDisconnected( function(ret, err) {
+				alert("onCallCallDisconnected>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function onCallCallEstablished(){
+			demo.onCallCallEstablished( function(ret, err) {
+				alert("onCallCallEstablished>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function onCallResponse(){
+			demo.onCallResponse( function(ret, err) {
+				alert("onCallResponse>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function responseCall(){
+			demo.responseCall({
+				callID : '',    //call id
+				accept : true  //是否接听
+			}, function(ret, err) {
+				alert("responseCall>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function onCallReceive(){
+			demo.onCallReceive( function(ret, err) {//return callID
+				alert("onCallReceive>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function startCall(){
+			demo.startCall({
+				type : 1,	// 呼叫类型 1:音频 2:视频
+				serverRecord : true, // 是否开启服务端录制
+				callees : ['zf1001']  //被叫帐号列表, 现在只支持传入一个被叫
+			}, function(ret, err) {//return callID
+				alert("startCall>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		
+		function login() {
+			demo.login({
+				userId : 'zf1002',
+				password : '1c63129ae9db9c60c3e8aa94d3e00495',
+			}, function(ret, err) {
+				alert("login>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function onKick() {
+			demo.onKick(function(ret, err) {
+				alert("onKick>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function onMultiLoginClientsChanged() {
+			demo.onMultiLoginClientsChanged(function(ret, err) {
+				alert("onMultiLoginClientsChanged>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function logout() {
+			demo.logout(function(ret, err) {
+				alert("logout>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function willSendIMMessage() {
+			demo.willSendIMMessage(function(ret, err) {
+				alert("willSendIMMessage>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function onSendMessageWithProgress() {
+			demo.onSendMessageWithProgress(function(ret, err) {
+				alert("onSendMessageWithProgress>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function sendText() {
+			demo.sendText({
+				sessionId : '123458848',
+				sessionType : 1,
+				content : '我是zf1002文本测试群聊测试',
+				ext : {
+					key : 'key1'
+				}
+			}, function(ret, err) {
+				alert("sendText>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function sendImage() {
+			demo.sendImage({
+				sessionId : 'zf1001',
+				sessionType : 0,
+				filePath : 'widget://image/bottombtn0101.png',
+				displayName : '我是zf1002图片',
+				ext : {
+					key : 'key1'
+				}
+			}, function(ret, err) {
+				alert("sendImage>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function sendLocationMsg() {
+			demo.sendLocationMsg({
+				sessionId : 'zf1001',
+				sessionType : 0,
+				title : '我是zf1002地理位置',
+				latitude : 102,
+				longitude : 39,
+				ext : {
+					key : 'key1'
+				}
+			}, function(ret, err) {
+				alert("sendLocationMsg>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function sendAudio() {
+			demo.sendAudio({
+				sessionId : 'zf1001',
+				sessionType : 0,
+				filePath : mFilePath,
+				ext : {
+					key : 'key1'
+				}
+			}, function(ret, err) {
+				alert("sendAudio>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function sendVideo() {
+			demo.sendVideo({
+				sessionId : 'zf1001',
+				sessionType : 0,
+				filePath : 'widget://res/test1.mp4',
+				displayName : '我是zf1002视频',
+				ext : {
+					key : 'key1'
+				}
+			}, function(ret, err) {
+				alert("sendVideo>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function sendFile() {
+			demo.sendFile({
+				sessionId : 'zf1001',
+				sessionType : 0,
+				filePath : 'widget://res/sendFile.txt',
+				displayName : '我是zf1002文件',
+				ext : {
+					key : 'key1'
+				}
+			}, function(ret, err) {
+				alert("sendVideo>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function onRecvIMMessages() {
+			demo.onRecvIMMessages(function(ret, err) {
+				alert("onRecvIMMessages>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function allRecentSession() {
+			demo.allRecentSession(function(ret, err) {
+				alert("allRecentSession>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function fetchMessageHistory() {
+			demo.fetchMessageHistory({
+				sessionId : 'zf1001',
+				sessionType : 0,
+				limit : 100,
+				sync : false,
+				startTime : 0
+			}, function(ret, err) {
+				alert("fetchMessageHistory>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function switchAudioOutputDevice() {
+			demo.switchAudioOutputDevice({
+				outputDevice : 1
+			}, function(ret, err) {
+				alert("switchAudioOutputDevice>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function isPlaying() {
+			demo.isPlaying(function(ret, err) {
+				alert("isPlaying>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function playAudio() {
+			alert(mFilePath);
+			if (mFilePath) {
+				demo.playAudio({
+					filePath : mFilePath
+				}, function(ret, err) {
+					alert("playAudio>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+				});
+			}
+		}
+
+		function stopPlay() {
+			demo.stopPlay(function(ret, err) {
+				alert("stopPlay>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function isRecording() {
+			demo.isRecording(function(ret, err) {
+				alert("isRecording>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function recordAudioForDuration() {
+			demo.recordAudioForDuration({
+				duration : 60
+			}, function(ret, err) {
+				alert("recordAudioForDuration>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+				if (ret.status) {
+					if (ret.evenType == 'success') {
+						mFilePath = ret.filePath;
+					}
+				}
+			});
+		}
+
+		function cancelRecord() {
+			demo.cancelRecord(function(ret, err) {
+				alert("cancelRecord>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function stopRecord() {
+			demo.stopRecord(function(ret, err) {
+				alert("stopRecord>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function onIMTeamRemoved() {
+			demo.onIMTeamRemoved(function(ret, err) {
+				alert("onIMTeamRemoved>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function onIMTeamUpdated() {
+			demo.onIMTeamUpdated(function(ret, err) {
+				alert("onIMTeamUpdated>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function onIMTeamMemberChanged() {
+			demo.onIMTeamMemberChanged(function(ret, err) {
+				alert("onIMTeamUpdated>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function allMyTeams() {
+			demo.allMyTeams(function(ret, err) {
+				alert("allMyTeams>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function teamById() {
+			demo.teamById({
+				teamId : '123458848'
+			}, function(ret, err) {
+				alert("teamById>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function fetchTeamInfo() {
+			demo.fetchTeamInfo({
+				teamId : '123458848'
+			}, function(ret, err) {
+				alert("fetchTeamInfo>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function createTeam() {
+			demo.createTeam({
+				name : '消费zf1002测试',
+				type : 0,
+				joinMode : 0,
+				postscript : '',
+				intro : '',
+				announcement : '',
+				users : ['zf1001']
+			}, function(ret, err) {
+				alert("createTeam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function addUsers() {
+			demo.addUsers({
+				teamId : '123458848',
+				users : ['1003']
+			}, function(ret, err) {
+				alert("addUsers>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function acceptInviteWithTeam() {
+			demo.acceptInviteWithTeam({
+				teamId : '123458848', //群Id
+				invitorId : 'zf1001'//邀请者Id(不是被邀请者)
+			}, function(ret, err) {
+				alert("acceptInviteWithTeam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function rejectInviteWithTeam() {
+			demo.rejectInviteWithTeam({
+				teamId : '123458848', //群Id
+				invitorId : 'zf1001', //邀请者Id(不是被邀请者)
+				rejectReason : ''
+			}, function(ret, err) {
+				alert("rejectInviteWithTeam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function applyToTeam() {
+			demo.applyToTeam({
+				teamId : '123458848', //群Id
+				message : '我要加群!'//加群信息
+			}, function(ret, err) {
+				alert("applyToTeam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function passApplyToTeam() {
+			demo.passApplyToTeam({
+				teamId : '123458848', //群Id
+				userId : 'zf1002'//用户Id
+			}, function(ret, err) {
+				alert("passApplyToTeam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function rejectApplyToTeam() {
+			demo.rejectApplyToTeam({
+				teamId : '123458848', //群Id
+				userId : 'zf1002', //用户Id
+				rejectReason : ''
+			}, function(ret, err) {
+				alert("rejectApplyToTeam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function updateTeamName() {
+			demo.updateTeamName({
+				teamId : '123458848', //群Id
+				teamName : '修改群名称'
+			}, function(ret, err) {
+				alert("updateTeamName>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function updateTeamIntro() {
+			demo.updateTeamIntro({
+				teamId : '123458848', //群Id
+				intro : '修改群介绍'
+			}, function(ret, err) {
+				alert("updateTeamIntro>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function updateTeamAnnouncement() {
+			demo.updateTeamAnnouncement({
+				teamId : '123458848', //群Id
+				announcement : '修改群公告'
+			}, function(ret, err) {
+				alert("updateTeamAnnouncement>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function updateTeamJoinMode() {
+			demo.updateTeamJoinMode({
+				teamId : '123458848', //群Id
+				joinMode : 1 //群验证方式,允许所有人加入:0,需要验证:1,不允许任何人加入:2
+			}, function(ret, err) {
+				alert("updateTeamJoinMode>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function addManagersToTeam() {
+			demo.addManagersToTeam({
+				teamId : '123458848', //群Id
+				users : ['zf1001', 'zf1002']
+			}, function(ret, err) {
+				alert("addManagersToTeam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function removeManagersFromTeam() {
+			demo.removeManagersFromTeam({
+				teamId : '123458848', //群Id
+				users : ['zf1001', 'zf1002']
+			}, function(ret, err) {
+				alert("removeManagersFromTeam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function transferManagerWithTeam() {
+			demo.transferManagerWithTeam({
+				teamId : '123458848', //群Id
+				newOwnerId : 'zf1002',
+				isLeave : false
+			}, function(ret, err) {
+				alert("transferManagerWithTeam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function fetchTeamMembers() {
+			demo.fetchTeamMembers({
+				teamId : '123458848'
+			}, function(ret, err) {
+				alert("fetchTeamMembers>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function quitTeam() {
+			demo.quitTeam({
+				teamId : '123458848'
+			}, function(ret, err) {
+				alert("quitTeam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function kickUsers() {
+			demo.kickUsers({
+				teamId : '123458848',
+				users : ['zf1001']
+			}, function(ret, err) {
+				alert("kickUsers>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function dismissTeam() {
+			demo.dismissTeam({
+				teamId : '123458848'
+			}, function(ret, err) {
+				alert("dismissTeam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function updateNotifyStateForTeam() {
+			demo.updateNotifyStateForTeam({
+				teamId : '123458848',
+				notify : false
+			}, function(ret, err) {
+				alert("updateNotifyStateForTeam>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function onIMSystemMessageRecieved() {
+			demo.onIMSystemMessageRecieved(function(ret, err) {
+				alert("onIMSystemMessageRecieved>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function fetchSystemNotifications() {
+			demo.fetchSystemNotifications({
+				limit : 10
+			}, function(ret, err) {
+				alert("fetchSystemNotifications>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function allNotificationsUnreadCount() {
+			demo.allNotificationsUnreadCount(function(ret, err) {
+				alert("allNotificationsUnreadCount>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function deleteAllNotifications() {
+			demo.deleteAllNotifications(function(ret, err) {
+				alert("deleteAllNotifications>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function markAllNotificationsAsRead() {
+			demo.markAllNotificationsAsRead(function(ret, err) {
+				alert("markAllNotificationsAsRead>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function onUserInfoUpdate() {
+			demo.onUserInfoUpdate(function(ret, err) {
+				alert("onUserInfoUpdate>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+		
+		function onBlackListChanged() {
+			demo.onBlackListChanged(function(ret, err) {
+				alert("onBlackListChanged>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function userInfo() {
+			demo.userInfo({
+				userId : 'zf1001'
+			}, function(ret, err) {
+				alert("userInfo>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function fetchUserInfos() {
+			demo.fetchUserInfos({
+				userIds : ['zf1001', 'zf1002']
+			}, function(ret, err) {
+				alert("fetchUserInfos>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function updateMyUserInfo() {
+			demo.updateMyUserInfo({
+				nickname : '昵称',
+				avatar : '',
+				sign : '',
+				gender : 1,
+				email : '176142998@qq.com',
+				birth : '2010-10-08',
+				mobile : '13000000000',
+				ext : {
+					key : 'key2'
+				}
+			}, function(ret, err) {
+				alert("updateMyUserInfo>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function myFriends() {
+			demo.myFriends(function(ret, err) {
+				alert("myFriends>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function requestFriend() {
+			demo.requestFriend({
+				userId : 'zf1002',
+				operation : 1,
+				message : ''
+			}, function(ret, err) {
+				alert("requestFriend>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function deleteFriend() {
+			demo.deleteFriend({
+				userId : 'zf1002'
+			}, function(ret, err) {
+				alert("deleteFriend>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function myBlackList() {
+			demo.myBlackList(function(ret, err) {
+				alert("myBlackList>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function addToBlackList() {
+			demo.addToBlackList({
+				userId : 'zf1002'
+			}, function(ret, err) {
+				alert("myBlackList>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function removeFromBlackBlackList() {
+			demo.removeFromBlackBlackList({
+				userId : 'zf1002'
+			}, function(ret, err) {
+				alert("removeFromBlackBlackList>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function isUserInBlackList() {
+			demo.isUserInBlackList({
+				userId : 'zf1002'
+			}, function(ret, err) {
+				alert("isUserInBlackList>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function myMuteUserList() {
+			demo.myMuteUserList(function(ret, err) {
+				alert("myMuteUserList>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function updateNotifyStateForUser() {
+			demo.updateNotifyStateForUser({
+				userId : 'zf1002',
+				notify : false
+			}, function(ret, err) {
+				alert("updateNotifyStateForUser>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function notifyForNewMsgForUser() {
+			demo.notifyForNewMsgForUser({
+				userId : 'zf1002'
+			}, function(ret, err) {
+				alert("notifyForNewMsgForUser>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function onChatRoomStatusChanged() {
+			demo.onChatRoomStatusChanged(function(ret, err) {
+				alert("onChatRoomStatusChanged>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function onChatRoomKickOutEvent() {
+			demo.onChatRoomKickOutEvent(function(ret, err) {
+				alert("onChatRoomKickOutEvent>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function enterChatRoom() {
+			demo.enterChatRoom({
+				roomId : '9769955',
+				nickName : '小飞',
+				avatar : '',
+				extension : {
+					key : 'key1'
+				},
+				notifyExtension : {
+					key : 'key2'
+				},
+			}, function(ret, err) {
+				alert("enterChatRoom>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function exitChatRoom() {
+			demo.exitChatRoom({
+				roomId : '9769955'
+			}, function(ret, err) {
+				alert("exitChatRoom>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function getChatRoomHistoryMsg() {
+			demo.getChatRoomHistoryMsg({
+				roomId : '9769955'
+			}, function(ret, err) {
+				alert("getChatRoomHistoryMsg>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function getChatRoomInfo() {
+			demo.getChatRoomInfo({
+				roomId : '9769955'
+			}, function(ret, err) {
+				alert("getChatRoomInfo>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function getChatRoomMembers() {
+			demo.getChatRoomMembers({
+				roomId : '9769955',
+				type : 0,
+				time : 0,
+				limit : 10
+			}, function(ret, err) {
+				alert("getChatRoomMembers>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function getChatRoomMembersByIds() {
+			demo.getChatRoomMembersByIds({
+				roomId : '9769955',
+				userIds : ['zf1001', 'zf1002']
+			}, function(ret, err) {
+				alert("getChatRoomMembersByIds>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function addUserToBlackList() {
+			demo.addUserToBlackList({
+				roomId : '9769955',
+				userId : 'zf1002',
+				isAdd : true
+			}, function(ret, err) {
+				alert("addUserToBlackList>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function muteUser() {
+			demo.muteUser({
+				roomId : '9769955',
+				userId : 'zf1002',
+				isMute : true
+			}, function(ret, err) {
+				alert("muteUser>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function setAdmin() {
+			demo.setAdmin({
+				roomId : '9769955',
+				userId : 'zf1002',
+				isAdmin : true
+			}, function(ret, err) {
+				alert("setAdmin>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function setNormal() {
+			demo.setNormal({
+				roomId : '9769955',
+				userId : 'zf1002',
+				isNormal : true
+			}, function(ret, err) {
+				alert("setNormal>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function kickMemberFromChatRoom() {
+			demo.kickMemberFromChatRoom({
+				roomId : '9769955',
+				userId : 'zf1002',
+				reason : ''
+			}, function(ret, err) {
+				alert("kickMemberFromChatRoom>>" + JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+	</script>
+</html>

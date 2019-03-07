@@ -1,0 +1,9 @@
+{
+	modules:[
+		{
+		    name:'keyboardView',
+		    class:'com.apicloud.keyboardview.KeyboardViewModule'
+		}
+		
+	]
+}

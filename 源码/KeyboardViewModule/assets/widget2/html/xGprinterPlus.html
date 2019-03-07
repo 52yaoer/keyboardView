@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="connect()">连接打印机</a>
+				<a class="button" tapmode="active" onclick="printTest()">打印测试页</a>
+				<a class="button" tapmode="active" onclick="getPrinterStatus()">查询打印机状态</a>
+				<a class="button" tapmode="active" onclick="getPrinterCommandType()">查询打印机命令模式</a>
+				<a class="button" tapmode="active" onclick="printReceipt()">打印收据(ESC模式打印)</a>
+				<a class="button" tapmode="active" onclick="printLabel()">打印标签(TSC模式打印)</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script>
+		var demo;
+
+		function connect(){
+	        demo.connect(function(ret, err){
+	        	alert(JSON.stringify(ret)+"   "+ JSON.stringify(err));
+	        });
+		}
+		
+		function printTest(){
+	        demo.printTest(function(ret, err){
+	        	alert(JSON.stringify(ret)+"   "+ JSON.stringify(err));
+	        });
+		}
+		
+		function getPrinterStatus(){
+	        demo.getPrinterStatus(function(ret, err){
+	        	alert(JSON.stringify(ret)+"   "+ JSON.stringify(err));
+	        });
+		}
+		
+		function getPrinterCommandType(){
+	        demo.getPrinterCommandType(function(ret, err){
+	        	alert(JSON.stringify(ret)+"   "+ JSON.stringify(err));
+	        });
+		}
+		
+		function printReceipt(){
+	        demo.printReceipt({
+	        	rows : [{
+	        		lineType : 'lines',
+	        		data : 3
+	        	},{//设置打印居中
+	        		lineType : 'align',
+	        		data : 'center'
+	        	},{//设置为倍高倍宽
+	        		lineType : 'style',
+	        		data : [0,0,1,1,0]
+	        	},{// 打印文字
+	        		lineType : 'text',
+	        		data : 'Sample\n'
+	        	},{
+	        		lineType : 'lineFeed'
+	        	},{//取消倍高倍宽
+	        		lineType : 'style',
+	        		data : [0,0,0,0,0]
+	        	},{//设置打印左对齐
+	        		lineType : 'align',
+	        		data : 'left'
+	        	},{// 打印文字
+	        		lineType : 'text',
+	        		data : 'Print text\n'
+	        	},{// 打印文字
+	        		lineType : 'text',
+	        		data : 'Welcome to use printer!\n'
+	        	},{
+	        		lineType : 'lineFeed'
+	        	},{// 打印文字
+	        		lineType : 'text',
+	        		data : 'Print bitmap!\n'
+	        	},{
+	        		lineType : 'image',
+	        		data : 'widget://image/huibo_logo.png'
+	        	},{// 打印文字
+	        		lineType : 'text',
+	        		data : 'Print code128\n'
+	        	},{//设置条码可识别字符位置在条码下方
+	        		lineType : 'barcodePosition',
+	        		data : 'below'
+	        	},{//设置条码高度为60点
+	        		lineType : 'barcodeHeight',
+	        		data : 60
+	        	},{//设置条码单元宽度为1点
+	        		lineType : 'barcodeWidth',
+	        		data : 1
+	        	},{//打印Code128码
+	        		lineType : 'code128',
+	        		data : '123456789'
+	        	},{
+	        		lineType : 'lineFeed'
+	        	},{// 打印文字
+	        		lineType : 'text',
+	        		data : 'Print QRcode\n'
+	        	},{//设置纠错等级
+	        		lineType : 'levelForQRCode',
+	        		data : 31
+	        	},{//设置qrcode模块大小
+	        		lineType : 'levelForQRCode',
+	        		data : 3
+	        	},{//设置qrcode内容
+	        		lineType : 'qrcode',
+	        		data : "www.printer.com.cn"
+	        	},{
+	        		lineType : 'lineFeed'
+	        	},{//设置打印居中
+	        		lineType : 'align',
+	        		data : 'center'
+	        	},{// 打印文字
+	        		lineType : 'text',
+	        		data : 'Completed!\r\n'
+	        	},{//开钱箱
+	        		lineType : 'openBox'
+	        	}]
+	        },function(ret, err){
+	        	alert(JSON.stringify(ret)+"   "+ JSON.stringify(err));
+	        });
+		}
+		
+		function printLabel(){
+	        demo.printLabel({
+	        	rows : [{
+	        		lineType : 'size',
+	        		width : 80,
+	        		height : 72
+	        	},{
+	        		lineType : 'gap',
+	        		data : 0
+	        	},{
+	        		lineType : 'cls'
+	        	},{
+	        		lineType : 'gap',
+	        		data : 0
+	        	},{// 左边框
+	        		lineType : 'bar',
+	        		x : 16,
+	        		y :  0,
+	        		width : 4,
+	        		height : 556
+	        	},{// 上边框
+	        		lineType : 'bar',
+	        		x : 16,
+	        		y :  0,
+	        		width : 608,
+	        		height : 8
+	        	},{// 右边框
+	        		lineType : 'bar',
+	        		x : 624,
+	        		y :  0,
+	        		width : 4,
+	        		height : 556
+	        	},{// 下边框
+	        		lineType : 'bar',
+	        		x : 16,
+	        		y :  556,
+	        		width : 608,
+	        		height : 4
+	        	},{// 图片单元格竖线
+	        		lineType : 'bar',
+	        		x : 16 + 130,
+	        		y :  0,
+	        		width : 2,
+	        		height : 106
+	        	},{//绘制图片
+	        		lineType : 'image',
+	        		x : 16 + 8,
+	        		y :  8,
+	        		data : 'widget://image/huibo_logo.png'
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 8,
+	        		y :  8,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 1,
+	        		data : '青岛汇博通商贸有限公司'
+	        	},{// 图片单元格横线
+	        		lineType : 'bar',
+	        		x : 16 + 130,
+	        		y :  56,
+	        		width : 640 - 130 - 16 - 16,
+	        		height : 2
+	        	},{// 二维码旁边竖线
+	        		lineType : 'bar',
+	        		x : 16 + 320,
+	        		y :  106,
+	        		width : 2,
+	        		height : 556 - 106
+	        	},{// 横线
+	        		lineType : 'bar',
+	        		x : 16 ,
+	        		y :  106,
+	        		width : 608,
+	        		height : 2
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 4,
+	        		y :  106 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '捆包号：R103571234'
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 320 + 2,
+	        		y :  106 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '钢厂资源号：ML123456789'
+	        	},{// 横线
+	        		lineType : 'bar',
+	        		x : 16 + 320 + 2 ,
+	        		y :  156,
+	        		width : 608,
+	        		height : 2
+	        	},{//绘制code128
+	        		lineType : 'code128',
+	        		x : 16 + 16,
+	        		y :  156 + 2,
+	        		height : 48,
+	        		rotation : 0,
+	        		data : '1234567890'
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 320 + 2,
+	        		y :  156 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '母卷号：P123456789'
+	        	},{// 横线
+	        		lineType : 'bar',
+	        		x : 16 ,
+	        		y :  206,
+	        		width : 608,
+	        		height : 2
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 4,
+	        		y :  206 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '品名：冷轧卷'
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 320 + 2,
+	        		y :  206 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '牌号：DC06'
+	        	},{// 横线
+	        		lineType : 'bar',
+	        		x : 16 ,
+	        		y :  256,
+	        		width : 608,
+	        		height : 2
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 4,
+	        		y :  256 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '规格：1.2*1250*C'
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 320 + 2,
+	        		y :  256 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '净重：10.5t'
+	        	},{// 横线
+	        		lineType : 'bar',
+	        		x : 16 ,
+	        		y :  306,
+	        		width : 608,
+	        		height : 2
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 4,
+	        		y :  306 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '毛重：10.8t'
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 320 + 2,
+	        		y :  306 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '件数：1'
+	        	},{// 横线
+	        		lineType : 'bar',
+	        		x : 16 ,
+	        		y :  356,
+	        		width : 608,
+	        		height : 2
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 4,
+	        		y :  356 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '库区：原料区'
+	        	},{//绘制qrcode
+	        		lineType : 'qrcode',
+	        		x : 16 + 320 + 2 + 100,
+	        		y :  356 + 2 + 25,
+	        		level : 'L',
+	        		cellwith : 5,
+	        		rotation : 0,
+	        		data : '捆包号|钢厂资源号|母卷号|品名|牌号|规格|净重|毛重'
+	        	},{// 横线
+	        		lineType : 'bar',
+	        		x : 16 ,
+	        		y :  406,
+	        		width : 320,
+	        		height : 2
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 4,
+	        		y :  406 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '库位：YC-02'
+	        	},{// 横线
+	        		lineType : 'bar',
+	        		x : 16 ,
+	        		y :  456,
+	        		width : 320,
+	        		height : 2
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 4,
+	        		y :  456 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '收货单位:英大'
+	        	},{// 横线
+	        		lineType : 'bar',
+	        		x : 16 ,
+	        		y :  506,
+	        		width : 320,
+	        		height : 2
+	        	},{//绘制文本
+	        		lineType : 'text',
+	        		x : 16 + 4,
+	        		y :  506 + 2,
+	        		rotation : 0,
+	        		xscal : 1,
+	        		yscal : 2,
+	        		data : '日期:2016.06.12'
+	        	}]
+	        },function(ret, err){
+	        	alert(JSON.stringify(ret)+"   "+ JSON.stringify(err));
+	        });
+		}
+
+
+		function apiready() {
+			demo = api.require('xGprinterPlus');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+	</script>
+</html>

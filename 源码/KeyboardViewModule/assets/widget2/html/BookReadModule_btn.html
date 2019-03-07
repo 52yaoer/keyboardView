@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>AUI快速完成布局</title>
+		<link rel="stylesheet" type="text/css" href="../css/aui.2.0.css" />
+		<style>
+			body,section {
+				background-color: transparent !important;
+				padding: 0;
+				margin: 0;
+			}
+			
+			.redtext{
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<section class="aui-grid">
+			<div class="aui-row redtext">
+				<div class="aui-col-xs-3" onclick="prePage()">
+					<div class="aui-grid-label">
+						上一章
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="nextPage()">
+					<div class="aui-grid-label">
+						下一章
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="setDayOrNight(false)">
+					<div class="aui-grid-label">
+						日间
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="setDayOrNight(true)">
+					<div class="aui-grid-label">
+						夜间
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="setPageMode(0)">
+					<div class="aui-grid-label">
+						翻页模式(仿真)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="setPageMode(1)">
+					<div class="aui-grid-label">
+						翻页模式(覆盖)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="setPageMode(2)">
+					<div class="aui-grid-label">
+						翻页模式(滑动)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="setPageMode(3)">
+					<div class="aui-grid-label">
+						翻页模式(无)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="changeTypeFace(1)">
+					<div class="aui-grid-label">
+						改变字体(羿创旗黑)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="changeTypeFace(2)">
+					<div class="aui-grid-label">
+						改变字体(卡通)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="changeTypeFace(3)">
+					<div class="aui-grid-label">
+						改变字体(繁宋体)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="changeTypeFace(4)">
+					<div class="aui-grid-label">
+						改变字体(默认)
+					</div>
+				</div>
+				
+				
+				<div class="aui-col-xs-3" onclick="changeBright(20)">
+					<div class="aui-grid-label">
+						改变亮度(20)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="changeBright(80)">
+					<div class="aui-grid-label">
+						改变亮度(80)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="changeFontSize(10)">
+					<div class="aui-grid-label">
+						字体大小(10)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="changeFontSize(40)">
+					<div class="aui-grid-label">
+						字体大小(40)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="changeBookBg(1)">
+					<div class="aui-grid-label">
+						改变背景(1)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="changeBookBg(2)">
+					<div class="aui-grid-label">
+						改变背景(2)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="changeBookBg(3)">
+					<div class="aui-grid-label">
+						改变背景(3)
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="changeBookBg(4)">
+					<div class="aui-grid-label">
+						改变背景(4)
+					</div>
+				</div>
+				
+				
+				
+				<div class="aui-col-xs-3" onclick="addBookMark()">
+					<div class="aui-grid-label">
+						添加书签
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="getConfig()">
+					<div class="aui-grid-label">
+						获取配置
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="getDirectoryList()">
+					<div class="aui-grid-label">
+						获取目录
+					</div>
+				</div>
+				
+				<div class="aui-col-xs-3" onclick="getMarksList()">
+					<div class="aui-grid-label">
+						获取书签
+					</div>
+				</div>
+				
+				
+				<div class="aui-col-xs-3" onclick="closeframe()">
+					<div class="aui-grid-label">
+						关闭按钮
+					</div>
+				</div>
+				
+			</div>
+		</section>
+	</body>
+	<script type="text/javascript" src="../script/api.js" ></script>
+	<script type="text/javascript">
+		function prePage() {
+			demo.prePage(function(ret, err) {
+				alert("prePage>>"+JSON.stringify(ret) + "   " + JSON.stringify(err));
+			});
+		}
+		
+		function nextPage() {
+			demo.nextPage(function(ret, err) {
+				alert("nextPage>>"+JSON.stringify(ret) + "   " + JSON.stringify(err));
+			});
+		}
+		
+		
+		function setDayOrNight(type1) {
+			demo.setDayOrNight({
+				type : type1
+			},function(ret, err) {
+				alert("setDayOrNight>>"+JSON.stringify(ret) + "   " + JSON.stringify(err));
+			});
+		}
+		
+		
+		function setPageMode(type1) {
+			demo.setPageMode({
+				mode : type1
+			},function(ret, err) {
+				alert("setPageMode>>"+JSON.stringify(ret) + "   " + JSON.stringify(err));
+			});
+		}
+		
+		function addBookMark() {
+			demo.addBookMark(function(ret, err) {
+				alert("addBookMark>>"+JSON.stringify(ret) + "   " + JSON.stringify(err));
+			});
+		}
+		
+		function getConfig() {
+			demo.getConfig(function(ret, err) {
+				alert("getConfig>>"+JSON.stringify(ret) + "   " + JSON.stringify(err));
+			});
+		}
+		
+		function changeBright(light1) {
+			demo.changeBright({
+				light : light1
+			},function(ret, err) {
+				alert("changeBright>>"+JSON.stringify(ret) + "   " + JSON.stringify(err));
+			});
+		}
+		
+		function changeFontSize(fontSize1) {
+			demo.changeFontSize({
+				fontSize : fontSize1
+			},function(ret, err) {
+				alert("changeFontSize>>"+JSON.stringify(ret) + "   " + JSON.stringify(err));
+			});
+		}
+		
+		
+		function changeTypeFace(type1) {
+			demo.changeTypeFace({
+				typeFace : type1
+			},function(ret, err) {
+				alert("changeTypeFace>>"+JSON.stringify(ret) + "   " + JSON.stringify(err));
+			});
+		}
+		
+		function changeBookBg(type1) {
+			demo.changeBookBg({
+				bookBackground : type1
+			},function(ret, err) {
+				alert("changeBookBg>>"+JSON.stringify(ret) + "   " + JSON.stringify(err));
+			});
+		}
+		
+		function getDirectoryList() {
+			demo.getDirectoryList(function(ret, err) {
+				alert("getDirectoryList>>"+JSON.stringify(ret) + "   " + JSON.stringify(err));
+			});
+		}
+		
+		function getMarksList() {
+			demo.getMarksList(function(ret, err) {
+				alert("getDirectoryList>>"+JSON.stringify(ret) + "   " + JSON.stringify(err));
+			});
+		}
+		
+		function closeframe(){
+			api.sendEvent({
+	            name:'closeframe'
+            });
+		}
+		
+		var demo;
+		apiready = function() {
+			api.parseTapmode();
+			demo = api.require('bookread');
+		}
+		var tab = document.querySelectorAll(".aui-tab-item");
+		for (var i in tab) {
+			tab[i].onclick = function(e) {
+				document.querySelector(".aui-tab-item.aui-active").classList.remove("aui-active");
+				e.target.classList.add("aui-active");
+			}
+		}
+	</script>
+</html>

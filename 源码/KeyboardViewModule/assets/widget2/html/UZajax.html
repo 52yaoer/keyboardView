@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="ajaxT()" >获取4条数据</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		apiready = function() {
+			
+		}
+		function ajaxT() {
+			var urls = ['http://cejwp.jianzhe.com/cataf?keywords=四件套', 'http://cejwp.jianzhe.com/cataf?keywords=水杯', 'http://cejwp.jianzhe.com/cataf?keywords=女包', 'http://cejwp.jianzhe.com/cataf?keywords=男鞋'];
+			var retData = new Array();
+			ajaxS(urls,0,retData);
+		}
+		
+		//递归实现ajax获取数据
+		function ajaxS(urls,index,retData){
+			if(index == urls.length){
+				//原数据
+				alert(JSON.stringify(retData));
+				
+				//随机处理数组
+				alert(JSON.stringify(shuffle(retData)));
+				return;
+			}
+			api.ajax({
+	            url: urls[index]
+            },function(ret,err){
+            	if(ret.data){
+            		Array.prototype.push.apply(retData, ret.data);
+            		var _index = index+1;
+            		ajaxS(urls,_index,retData);
+            	}
+            });
+		}
+		
+		function shuffle(a) {
+		    var b = [];
+		    while (a.length > 0) {
+		        var index = parseInt(Math.random() * (a.length - 1));
+		        b.push(a[index]);
+		        a.splice(index, 1);
+		    }
+		    return b;
+		}
+	</script>
+</html>

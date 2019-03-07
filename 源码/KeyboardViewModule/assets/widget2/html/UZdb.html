@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="openDb()" >打开数据库</a>
+				<a class="button" tapmode="active" onclick="inserts('A,B,C')" >插入A,B,C</a>
+				<a class="button" tapmode="active" onclick="inserts('D,E,F')" >插入D,E,F</a>
+				<a class="button" tapmode="active" onclick="inserts('X,E,R')" >插入X,E,R</a>
+				<a class="button" tapmode="active" onclick="inserts('H,G,T')" >插入H,G,T</a>
+				<a class="button" tapmode="active" onclick="inserts('O,P,T')" >插入O,P,T</a>
+				<a class="button" tapmode="active" onclick="inserts('H,A,D')" >插入H,A,D</a>
+				<a class="button" tapmode="active" onclick="inserts('W,Q,L')" >插入W,Q,L</a>
+				<a class="button" tapmode="active" onclick="inserts('C,V,F')" >插入C,V,F</a>
+				<a class="button" tapmode="active" onclick="get()" >获取数据</a>
+				<a class="button" tapmode="active" onclick="clean()" >清除多余数据</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		apiready = function() {
+		}
+		var databaseName = "pagetype1";
+		//open接口放在你的首页
+		function openDb() {
+			//打开数据库
+			var db = api.require('db');
+			var ret = db.openDatabaseSync({
+				name : databaseName
+			});
+			if (!ret.status) {
+				// console.log(err.msg);
+				return;
+			}
+			var sql1 = "CREATE TABLE IF NOT EXISTS `pagetype` (name Text, count Integer)";
+			var ret1 = db.executeSqlSync({
+				name : databaseName,
+				sql : sql1
+			});
+		}
+
+		//end
+		function inserts(values) {
+			var temp = values.split(",");
+			for (var t in temp) {
+				var str = temp[t];
+				insert(str);
+			}
+			alert("ok");
+//			可以在每次保存后进行数据清洗
+//			clean();
+		}
+
+		function insert(value) {
+			var db = api.require('db');
+			var ret1 = db.selectSqlSync({
+				name : databaseName,
+				sql : 'SELECT * FROM pagetype where name="' + value + '" order by count desc'
+			});
+			if (!ret1.status) {
+				return;
+			}
+			if (ret1.data.length == 0) {
+				var ret2 = db.executeSqlSync({
+					name : databaseName,
+					sql : 'INSERT INTO pagetype (name , count) values ("' + value + '", 1)'
+				});
+			} else {
+				var ret2 = db.executeSqlSync({
+					name : databaseName,
+					sql : 'UPDATE pagetype SET count = count+1 WHERE name = "' + value + '"'
+				});
+			}
+		}
+
+		function get() {
+			var db = api.require('db');
+			var ret1 = db.selectSqlSync({
+				name : databaseName,
+				sql : 'SELECT * FROM pagetype ORDER BY count DESC limit 0,20'
+			});
+			alert(JSON.stringify(ret1.data));
+		}
+
+		function deleteByName(name){
+			var db = api.require('db');
+			var ret1 = db.executeSqlSync({
+				name : databaseName,
+				sql : 'DELETE FROM pagetype WHERE name = "' + name + '"'
+			});
+		}
+
+		function clean() {
+			var db = api.require('db');
+			var ret1 = db.selectSqlSync({
+				name : databaseName,
+				sql : 'SELECT * FROM pagetype order by count desc'
+			});
+			if (!ret1.status) {
+				return;
+			}
+			var data = ret1.data;
+			//多余10条则进行清洗数据(请修改自己需要清洗数据的边界值,当前默认：10)
+			if (data.length > 10) {
+				var names = "";
+				for(var i =10 ; i<data.length ; i++){
+					names = names+"'"+data[i].name+"',";
+				}
+				names = names+"'db'";
+				
+				var ret2 = db.selectSqlSync({
+					name : databaseName,
+					sql : 'DELETE FROM pagetype WHERE name in ('+names+')'
+				});
+			}
+		}
+	</script>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<a class="button" tapmode="active" onclick="addShortCut()">添加快捷图标</a>
+			</div>
+		</div>
+	</body>
+	<script>
+		var demo;
+		function addShortCut() {
+			var param1 = {
+				key1 : "key1",
+				key2 : "key2",
+				key3 : "key3"
+			};
+			var param = {
+				title : "小飞图标",
+				//icon : "widget://image/ic_launcher.png",
+				urlScheme : "myscheme",
+				appParam : param1,
+			};
+			demo.addShortCut(param, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function apiready() {
+			demo = api.require('appshortcut');
+			api.addEventListener({
+				name : 'appintent'
+			}, function(ret, err) {
+				alert("快捷appintent方式传值:" + JSON.stringify(ret));
+			});
+		}
+	</script>
+</html>

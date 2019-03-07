@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="pairedDevice()">已配对列表</a>
+				<a class="button" tapmode="active" onclick="discoverable()">蓝牙可见</a>
+				<a class="button" tapmode="active" onclick="scanDevice()">蓝牙扫描</a>
+				<a class="button" tapmode="active" onclick="sendMessage()">发送数据</a>
+				<a class="button" tapmode="active" onclick="readMessage()">读取数据</a>
+				<a class="button" tapmode="active" onclick="bluetoothState()">蓝牙状态</a>
+				<a class="button" tapmode="active" onclick="connectState()">连接状态</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('btsppiot');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+			demo.INIT({
+			}, function(ret, err) {
+			});
+			/**
+			 demo.connect({
+			 sppMac : "30:1A:1C:09:0E:32",
+			 isToast : false
+			 }, function(ret, err) {
+			 var status = ret.status;
+			 if (status == 3)
+			 api.toast({
+			 msg : "给定物理地址有误"
+			 });
+			 });**/
+			demo.autoConnect();
+			//自动连接以配对串口蓝牙
+		}
+		//蓝牙已配对列表
+		function pairedDevice() {
+			//alert("蓝牙已配对列表");
+			demo.paired({
+			}, function(ret, err) {
+			});
+		}
+
+		//设置蓝牙设备是否可见
+		function discoverable() {
+			//alert("蓝牙可见设置");
+			var time = 128;
+			var is = true;
+			demo.discoverable({
+				isDiscoverable : is,
+				time : time,
+			}, function(ret, err) {
+			});
+		}
+
+		//发送数据
+		function sendMessage() {
+			//alert("发送数据");
+			demo.send({
+				sendData : "1234567890qazwsxedcrfvtgbyhnujmi",
+			}, function(ret, err) {
+			});
+		}
+
+		//读取数据
+		function readMessage() {
+			//alert("读取数据");
+			demo.receive({
+			}, function(ret, err) {
+			});
+		}
+
+		//获取状态
+		function bluetoothState() {
+			//alert("获取状态");
+			demo.bluetoothState({}, function(ret, err) {
+				var status = ret.bluetoothState;
+				if (status == 1)
+					api.toast({
+						msg : "蓝牙已关闭"
+					});
+				if (status == 2)
+					api.toast({
+						msg : "蓝牙已开启"
+					});
+				if (status == 3)
+					api.toast({
+						msg : "蓝牙正在关闭"
+					});
+				if (status == 4)
+					api.toast({
+						msg : "蓝牙正在开启"
+					});
+			});
+		}
+
+		//获取状态
+		function connectState() {
+			//alert("获取状态");
+			demo.connectState({}, function(ret, err) {
+				var status = ret.connectState;
+				if (status == 1)
+					api.toast({
+						msg : "连接断开"
+					});
+				if (status == 2)
+					api.toast({
+						msg : "已经连接"
+					});
+				if (status == 3)
+					api.toast({
+						msg : "正在连接"
+					});
+				if (status == 4)
+					api.toast({
+						msg : "连接失败"
+					});
+				if (status == 5)
+					api.toast({
+						msg : "连接丢失"
+					});
+			});
+		}
+
+		//蓝牙扫描
+		function scanDevice() {
+			demo.scan({
+			}, function(ret, err) {
+			});
+		}
+	</script>
+</html>

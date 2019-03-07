@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+			<br>
+				<a class="button" tapmode="active" onclick="intRecognizerService()" >初始化语音识别服务</a>
+				<a class="button" tapmode="active" onclick="startRecognizer()" >开始识别</a>     
+				<a class="button" tapmode="active" onclick="stopRecognizer()" >停止识别</a>     
+				<a class="button" tapmode="active" onclick="cancelRecognizer()" >取消识别</a>
+				<a class="button" tapmode="active" onclick="releaseRecognizer()" >销毁语音识别服务</a>
+			<br>
+				<a class="button" tapmode="active" onclick="initSpeakService()" >初始化合成服务</a>   
+				<a class="button" tapmode="active" onclick="startSpeak()" >开始合成识别(即开始播放)</a>     
+				<a class="button" tapmode="active" onclick="pauseSpeak()" >暂停播放(仅调用startSpeak后生效)</a>   
+				<a class="button" tapmode="active" onclick="resumeSpeak()" >继续播放(仅调用speak后生效，调用pause生效)</a>          
+				<a class="button" tapmode="active" onclick="stopSpeak()" >停止合成引擎(即停止播放)</a>     
+				<a class="button" tapmode="active" onclick="releaseSpeak()" >销毁语音合成服务</a>  
+			<br>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('baiduSpeech');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+		function intRecognizerService(){
+	        demo.intRecognizerService({
+		        	grammarPath : 'widget://res/baidu_speech_grammar.bsg',  // 设置离线命令词文件路径
+		        	slotData : {
+		        		name : ['妈妈','老伍'],
+		        		appname : ['手百','度秘']
+		        	},
+	       		grammarPath_iOS : 'widget://res/bds_easr_gramm.dat',  // 设置离线命令词文件路径
+                basicModelPath_iOS : 'widget://res/bds_easr_basic_model.dat'    //命令词引擎语言模型文件路径
+	        }, function(ret, err){
+	        	//ret.evenType  -->  onAsrReady 引擎就绪，可以开始说话
+	        	                  //onAsrBegin 检测到用户说话
+	        	                  //onAsrEnd 检测到用户说话结束
+	        	                  //onAsrPartialResult 临时识别结果
+	        	                  //onAsrFinalResult 最终识别结果
+	        	                  //onAsrFinishError 识别错误
+	        	                  //onAsrFinish 识别一段话结束。如果是长语音的情况会继续识别下段话。
+	        	                  //onAsrLongFinish 长语音识别结束
+	        	                  //onOfflineLoaded 使用离线命令词时，有该回调说明离线语法资源加载成功
+	        	                  //onOfflineUnLoaded 离线资源卸载成功
+	        	                  //onAsrExit 识别引擎结束并空闲中
+	        	if(ret.message){
+	        		alert(JSON.stringify(ret));
+	        	}else{
+		        	api.toast({
+		                msg : JSON.stringify(ret)
+	                });
+	        	}
+	        	
+	        });
+		}
+		
+	    
+	    function startRecognizer(){
+	        demo.startRecognizer(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function stopRecognizer(){
+	        demo.stopRecognizer(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function cancelRecognizer(){
+	        demo.cancelRecognizer(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function releaseRecognizer(){
+	        demo.releaseRecognizer(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function initSpeakService(){
+	        demo.initSpeakService({
+	        	speaker : 1,  //0 普通女声（默认） 1 普通男声 2 情感男声<度逍遥> 3 情感儿童声<度丫丫>
+	        	volume : 5,    //设置合成的音量，0-9 ，默认 5
+	        	speed : 5,     //设置合成的语速，0-9 ，默认 5
+	        	pitch : 5,     //设置合成的语调，0-9 ，默认 5
+	        	mixmode : 0,   //0 默认 ，wifi状态下使用在线，非wifi离线。在线状态下，请求超时6s自动转离线
+	        					//1 wifi状态下使用在线，非wifi离线。在线状态下， 请求超时1.2s自动转离线
+	        					//2 3G 4G wifi状态下使用在线，其它状态离线。在线状态下，请求超时1.2s自动转离线
+	        					//3 2G 3G 4G wifi状态下使用在线，其它状态离线。在线状态下，请求超时1.2s自动转离线
+	        },function(ret, err){
+	        	//ret.evenType -->>  TtsError  TtsSuccess
+	        		api.toast({
+		                msg : JSON.stringify(ret)
+	                });
+	        });
+		}
+		
+		function startSpeak(){
+	        demo.startSpeak({
+	        	text : '其它状态离线。在线状态下，请求超时1.2s自动转离线'
+	        },function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function pauseSpeak(){
+	        demo.pauseSpeak(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function resumeSpeak(){
+	        demo.resumeSpeak(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function stopSpeak(){
+	        demo.stopSpeak(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function releaseSpeak(){
+	        demo.releaseSpeak(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+
+	</script>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="clickbtn" tapmode="active" onclick="setOnClickListener()" >按钮点击监听</a>
+				<a class="clickbtn" tapmode="active" onclick="openButton()" >打开悬浮按钮</a>
+				<a class="clickbtn" tapmode="active" onclick="hidenButton()" >隐藏悬浮按钮</a>
+				<a class="clickbtn" tapmode="active" onclick="showButton()" >显示悬浮按钮</a>
+				<a class="clickbtn" tapmode="active" onclick="closeButton()" >关闭悬浮按钮</a>
+				<a class="clickbtn" tapmode="active" onclick="updateButtonPic()" >修改悬浮按钮图片</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script>
+		var demo;
+		function apiready() {
+			demo = api.require('floatButton');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+
+		function setOnClickListener() {
+			demo.setOnClickListener(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function openButton() {
+			demo.openButton({
+				rect : {
+					x : 10,
+					y : 10,
+					w : 30,
+					h : 30
+				},
+				lineColor : '#000000',
+				btnPic : 'widget://image/refresh.png'
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function closeButton() {
+			demo.closeButton(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function hidenButton() {
+			demo.hidenButton(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function showButton() {
+			demo.showButton(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+		
+		function updateButtonPic(){
+	        demo.updateButtonPic({
+	        	btnPic : 'widget://image/refresh.png'
+	        }, function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+	</script>
+</html>

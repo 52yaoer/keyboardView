@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>title</title>
+		<link rel="stylesheet" type="text/css" href="../css/api.css"/>
+		<style>
+			body {
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: block;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 36px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.6);
+			}
+		</style>
+	</head>
+	<body>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<a class="button" tapmode="active" onclick="open_g()">打开谷歌地图</a>
+		<a class="button" tapmode="active" onclick="close_g()">关闭谷歌地图</a>
+		<a class="button" tapmode="active" onclick="show_g()">显示谷歌地图</a>
+		<a class="button" tapmode="active" onclick="hide_g()">隐藏谷歌地图</a>
+		<a class="button" tapmode="active" onclick="setType_g()">设置地图类型</a>
+		<a class="button" tapmode="active" onclick="setTraffic_g()">设置地图是否显示交通路况</a>
+		<a class="button" tapmode="active" onclick="setLocationButton_g()">设置地图是否显示定位按钮</a>
+		<a class="button" tapmode="active" onclick="setCompassButton_g()">设置地图是否显示指南针</a>
+		<a class="button" tapmode="active" onclick="setBuildings_g()">设置地图是否显示建筑</a>
+		<a class="button" tapmode="active" onclick="setRect_g()">重设地图的显示区域</a>
+		<a class="button" tapmode="active" onclick="getLocation_g()">获取当前位置信息</a>
+		<a class="button" tapmode="active" onclick="stopLocation_g()">停止定位</a>
+		<a class="button" tapmode="active" onclick="getCoordsFromName_g()">根据地址查找经纬度</a>
+		<a class="button" tapmode="active" onclick="getNameFromCoords_g()">根据经纬度查找地址信息</a>
+		<a class="button" tapmode="active" onclick="getDistance_g()">获取地图两点之间的距离</a>
+		<a class="button" tapmode="active" onclick="showUserLocation_g()">是否在地图上显示用户位置</a>
+		<a class="button" tapmode="active" onclick="setCenter_g()">根据经纬度设置谷歌地图中心点</a>
+		<a class="button" tapmode="active" onclick="getCenter_g()">获取谷歌地图中心点坐标</a>
+		<a class="button" tapmode="active" onclick="getZoomExtremity_g()">获取谷歌地图缩放最大、最小值</a>
+		<a class="button" tapmode="active" onclick="setZoomLevel_g()">设置谷歌地图缩放等级</a>
+		<a class="button" tapmode="active" onclick="getZoomLevel_g()">获取地图缩放级别取值范围</a>
+		<a class="button" tapmode="active" onclick="addEventListener_g()">监听地图相关事件</a>
+		<a class="button" tapmode="active" onclick="removeEventListener_g()">停止监听地图相关事件</a>
+		<a class="button" tapmode="active" onclick="addAnnotations_g()">在地图上添加标注信息</a>
+		<a class="button" tapmode="active" onclick="addAnnotationListener_g()">添加对地图上标注的监听</a>
+		<a class="button" tapmode="active" onclick="getAnnotationCoords_g()">获取指定标注的经纬度</a>
+		<a class="button" tapmode="active" onclick="setAnnotationCoords_g()">设置某个已添加标注的经纬度</a>
+		<a class="button" tapmode="active" onclick="setAnnotationIcon_g()">设置某个已添加标注的图标</a>
+		<a class="button" tapmode="active" onclick="removeAnnotations_g()">移除制定标注</a>
+		<a class="button" tapmode="active" onclick="setBubble_g()">设置某个已添加标注的气泡</a>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript">
+		apiready = function() {
+		};
+		function open_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.open({
+				rect : {
+					x : 0,
+					y : 0,
+					w : 320,
+					h : 300
+				},
+				showUserLocation : true,
+				zoomLevel : 11,
+				center : {
+					lon : 116.4021310000,
+					lat : 39.9994480000
+				},
+				fixedOn : api.frameName,
+				fixed : true
+			}, function(ret) {
+				if (ret.status) {
+					alert(JSON.stringify(ret));
+				}
+			});
+		}
+
+		function close_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.close();
+		}
+
+		function show_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.show();
+		}
+
+		function hide_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.hide();
+		}
+
+		function setType_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.setType({
+				type : 'setellite'
+			});
+		}
+
+		function setTraffic_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.setTraffic({
+				traffic : true
+			});
+		}
+
+		function setLocationButton_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.setLocationButton({
+				locationButton : true
+			});
+		}
+
+		function setCompassButton_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.setCompassButton({
+				compassButton : true
+			});
+		}
+
+		function setBuildings_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.setBuildings({
+				buildings : true
+			});
+		}
+
+		function setRect_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.setRect({
+				rect : {
+					x : 0,
+					y : 0,
+					w : 320,
+					h : 300
+				}
+			});
+		}
+
+		function getLocation_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.getLocation(function(ret) {
+				if (ret.status) {
+					alert(JSON.stringify(ret));
+				}
+			});
+		}
+
+		function stopLocation_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.stopLocation();
+		}
+
+		function getCoordsFromName_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.getCoordsFromName({
+				city : '北京',
+				address : '天安门'
+			}, function(ret, err) {
+				if (ret.status) {
+					alert(JSON.stringify(ret));
+				} else {
+					alert(JSON.stringify(err));
+				}
+			});
+		}
+
+		function getNameFromCoords_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.getNameFromCoords({
+				lon : 116.384767,
+				lat : 39.989539
+			}, function(ret) {
+				if (ret.status) {
+					alert(JSON.stringify(ret));
+				}
+			});
+		}
+
+		function getDistance_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.getDistance({
+				start : {
+					lon : 106.486654,
+					lat : 29.490295
+				},
+				end : {
+					lon : 106.581515,
+					lat : 29.615467
+				}
+			}, function(ret) {
+				if (ret.status) {
+					alert(JSON.stringify(ret));
+				}
+			});
+		}
+
+		function showUserLocation_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.showUserLocation({
+				isShow : true
+			});
+		}
+
+		function setCenter_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.setCenter({
+				coords : {
+					lon : 116.404,
+					lat : 39.915
+				},
+				animation : false
+			});
+		}
+
+		function getCenter_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.getCenter(function(ret) {
+				if (ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+		}
+
+		function getZoomExtremity_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.getZoomExtremity(function(ret) {
+				if (ret) {
+					api.alert({
+						msg : JSON.stringify(ret)
+					});
+				}
+			});
+		}
+
+		function setZoomLevel_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.setZoomLevel({
+				level : 10,
+				animation : true
+			});
+		}
+
+		function getZoomLevel_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.getZoomLevel(function(ret) {
+				if (ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+		}
+
+		function addEventListener_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.addEventListener({
+				name : 'longPress'
+			}, function(ret) {
+				if (ret.status) {
+					alert(JSON.stringify(ret));
+				}
+			});
+		}
+
+		function removeEventListener_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.removeEventListener({
+				name : 'longPress'
+			});
+		}
+
+		function addAnnotations_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.addAnnotations({
+				annotations : [{
+					id : 1,
+					lon : 116.297,
+					lat : 40.109
+				}, {
+					id : 2,
+					lon : 116.29,
+					lat : 40.109
+				}, {
+					id : 3,
+					lon : 116.298,
+					lat : 40.11
+				}],
+				icons : ['widget://'],
+				draggable : true,
+				timeInterval : 2.0
+			});
+		}
+
+		function addAnnotationListener_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.addAnnotationListener(function(ret) {
+				if (ret.eventType == 'drag') {
+					if (ret.dragState == 'dragging') {
+						console.log('JSON.stringify(ret)');
+					} else if (ret.dragState == 'starting') {
+						console.log('JSON.stringify(ret)');
+					} else {
+						api.alert({
+							msg : JSON.stringify(ret)
+						});
+					}
+				} else {
+					api.alert({
+						msg : JSON.stringify(ret)
+					});
+				}
+			});
+		}
+
+		function getAnnotationCoords_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.getAnnotationCoords({
+				id : 2
+			}, function(ret) {
+				if (ret) {
+					api.alert({
+						msg : JSON.stringify(ret)
+					});
+				}
+			});
+		}
+
+		function setAnnotationCoords_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.setAnnotationCoords({
+				id : 2,
+				lon : 116.39,
+				lat : 40.209
+			});
+		}
+
+		function setAnnotationIcon_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.setAnnotationIcon({
+				id : 2,
+				icon : "widget://image/icon.png"
+			});
+		}
+
+		function removeAnnotations_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.removeAnnotations({
+				id : [1]
+			});
+		}
+
+		function setBubble_g() {
+			var GoogleMap = api.require('googleMap');
+			GoogleMap.setBubble({
+				id : 2,
+				content : {
+					title : '点击、长按我有回调',
+					snippet : '可在addAnnotationListener接口回调中监听点击、长按事件'
+				}
+			});
+		}
+	</script>
+</html>

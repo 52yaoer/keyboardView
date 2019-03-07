@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<input type="text" class="input1" name="deviceid" id="deviceid" size="40" value="http://www.nanchong.gov.cn/video/c21.flv"/>
+				<a class="button" tapmode="active" onclick="init()">初始化</a>
+				<a class="button" tapmode="active" onclick="play()">有按钮视频播放</a>
+				<a class="button" tapmode="active" onclick="playnotbtn()">无按钮视频播放</a>
+				<a class="button" tapmode="active" onclick="playUrl()">切换播放地址</a>
+				<a class="button" tapmode="active" onclick="pause()">暂停</a>
+				<a class="button" tapmode="active" onclick="start()">开始</a>
+				<a class="button" tapmode="active" onclick="stop()">停止</a>
+				<a class="button" tapmode="active" onclick="seekTo()">播放位置</a>
+				<a class="button" tapmode="active" onclick="full()">全屏播放</a>
+				<a class="button" tapmode="active" onclick="unfull()">退出全屏</a>
+				<a class="button" tapmode="active" onclick="getDuration()">视频时长</a>
+				<a class="button" tapmode="active" onclick="setVolume(10)">设置音量10</a>
+				<a class="button" tapmode="active" onclick="setVolume(80)">设置音量80</a>
+				<a class="button" tapmode="active" onclick="getCurrentPosition()">已播放时长</a>
+				<a class="button" tapmode="active" onclick="isFullScreen()">获取是否全屏状态</a>
+				<a class="button" tapmode="active" onclick="showPlayer()">显示播放器</a>
+				<a class="button" tapmode="active" onclick="hidePlayer()">隐藏播放器</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script>
+		var demo;
+		function closeWin() {
+			api.closeWin();
+		}
+
+		function setVolume(index) {
+			demo.setVolume({
+				volume : index
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function init() {
+			demo.init({
+//				ttf : "widget://res/UKIJTor.ttf",
+				logo : "widget://res/logo.png",
+				//background : "widget://res/play.png",
+				background : "widget://res/gif1.gif",
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function play() {
+			var _deviceid = document.getElementById("deviceid").value;
+			
+			demo.play({
+				rect : {
+					x : 0,
+					y : 0,
+					w : api.frameWidth - 0,
+					h : api.frameHeight/3
+				},
+				fixedOn : api.frameName,
+				fixed : true,
+				title : "test",
+				//url : "http://gotye-video-in.oss-cn-shanghai.aliyuncs.com/upload/23207/55bec6b9-1832-421e-bd58-1377736a827b.mp4",
+				//url : "http://7ypsiz.com1.z0.glb.clouddn.com/apicloud/5f14f9abe059fc1d3b83039654bd3fb4.mp4",
+				//url:"http://7xue4m.com1.z0.glb.clouddn.com/apicloud/39f7c87f9167f08607e1cef4e48a2e05.mp4",
+                //url : "rtmp://live.hkstv.hk.lxdns.com/live/hks",
+				//url : "http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8",
+				//url : "rtsp://184.72.239.149/vod/mp4://BigBuckBunny_175k.mov",
+				//url : "http://www.nanchong.gov.cn/video/c21.flv",
+				url : _deviceid,
+				defaultBtn : true,
+				enableFull : false,
+				isTopView : true,
+				isFullBtn : true,
+				isBackBtn : true,
+				scalingMode : 1, //1 无缩放 2 适应大小模式 3 充满可视范围，可能会被裁剪 4 缩放到充满视图
+				fullscreenMode : 'LANDSCAPE', //设置全屏按钮控制全屏显示模式是横屏还是竖屏 竖屏:PORTRAIT ; 横屏:LANDSCAPE
+				isShowProcessView : true, //是否显示进度条 (显示:true ; 不显示:false)
+                isShowTimeLable : true,//是否显示播放时间 显示:true ; 不显示:false
+                //isLive : true,          //是否直播视频源 (直播：true；点播：false)
+                isOpenGesture : true,  //是否开启手势控制音量，亮度和进度，默认开启手势控制，true为开启false为关闭
+			}, function(ret, err) {
+			});
+		}
+
+		function playnotbtn() {
+			demo.play({
+				rect : {
+					x : 0,
+					y : 0,
+					//w : api.frameWidth,
+					h : 200
+				},
+				fixedOn : api.frameName,
+				fixed : true,
+				title : "test",
+				url : "http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8",
+				defaultBtn : false,
+				enableFull : false
+			}, function(ret, err) {
+			});
+		}
+
+		function playUrl() {
+			demo.playUrl({
+				defaultBtn : true,
+				title : "test",
+				url : "http://7o50kb.com2.z0.glb.qiniucdn.com/c6.mp4",
+				process : 302334,
+				isLive : false,          //是否直播视频源 (直播：true；点播：false)
+				isOpenGesture : false,  //是否开启手势控制音量，亮度和进度，默认开启手势控制，true为开启false为关闭
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function seekTo() {
+			demo.seekTo({
+				process : 402334
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function pause() {
+			demo.pause(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function start() {
+			demo.start(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function stop() {
+			demo.stop(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function full() {
+			demo.full(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function unfull() {
+			demo.unfull(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function getDuration() {
+			demo.getDuration(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function getCurrentPosition() {
+			demo.getCurrentPosition(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function isFullScreen() {
+			demo.isFullScreen(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function showPlayer() {
+			demo.showPlayer(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function hidePlayer() {
+			demo.hidePlayer(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function apiready() {
+			demo = api.require('playModule');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+			
+			demo.addEventListener({
+				name : 'playEnd'
+			}, function(ret, err) {
+				alert("播放结束监听事件:" + JSON.stringify(ret));
+			});
+			demo.addEventListener({
+				name : 'pause'
+			}, function(ret, err) {
+				alert("pause:" + JSON.stringify(ret));
+			});
+			demo.addEventListener({
+				name : 'play'
+			}, function(ret, err) {
+				alert("play:" + JSON.stringify(ret));
+			});
+			demo.addEventListener({
+				name : 'backBtn'
+			}, function(ret, err) {
+				alert("backBtn:" + JSON.stringify(ret));
+			});
+			demo.addEventListener({
+				name : 'full'
+			}, function(ret, err) {
+				alert("full:" + JSON.stringify(ret));
+				api.setFullScreen({ fullScreen: true });
+			});
+			demo.addEventListener({
+				name : 'unfull'
+			}, function(ret, err) {
+				alert("unfull:" + JSON.stringify(ret));
+				api.setFullScreen({ fullScreen: false });
+			});
+			
+			api.addEventListener({
+	            name:'playkeyback'
+            },function(ret,err){
+            	demo.isFullScreen(function(ret, err) {
+					if (ret.status) {
+						demo.unfull(function(ret, err) {
+						});
+					} else {
+//						closeWin();
+						alert('关闭win页面');
+					}
+				});
+            });
+            
+            demo.addEventListener({
+                name : 'click'
+            }, function(ret, err) {
+                //alert("click:"+JSON.stringify(ret));
+            });
+		}
+	</script>
+</html>

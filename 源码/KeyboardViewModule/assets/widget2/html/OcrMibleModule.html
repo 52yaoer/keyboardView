@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                <a class="button" tapmode="active" onclick="initRecognizer()">SDK初始化</a>
+				<a class="button" tapmode="active" onclick="openCameraView()">打开相机预览</a>
+				<a class="button" tapmode="active" onclick="hideCameraView()">隐藏相机预览</a>
+				<a class="button" tapmode="active" onclick="showCameraView()">显示相机预览</a>
+				<a class="button" tapmode="active" onclick="closeCameraView()">关闭相机预览</a>
+				<a class="button" tapmode="active" onclick="switchLight()">闪光灯切换</a>
+				
+				<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('ocrMobile');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+			addEventListener();
+			
+			api.addEventListener({
+			    name:'pause'
+			}, function(ret,err){
+	        	pauseCameraView();
+	        });
+	        
+	    	api.addEventListener({
+			    name:'resume'
+			}, function(ret,err){
+	        	resumeCameraView();
+	        });
+		}
+		
+		function initRecognizer(){
+	        demo.initRecognizer({
+	        	iOS_Appkey : '2f954b56d5bea2473f802c1960-vagfvt',
+	        	Android_Appkey : '47bf8d4580b10338a47e2c0b10-vagfvt',
+	        },function(ret,err){
+	        	//ret.status && ret.result == 0 成功 其余代码为错误!
+	        	api.toast({
+		            msg:JSON.stringify(ret)
+	            });
+	        });
+		}
+		
+		function addEventListener() {
+			demo.addEventListener(function(ret, err) {
+				api.toast({
+					msg : JSON.stringify(ret)
+				});
+			});
+		}
+
+		function openCameraView() {
+			
+			demo.openCameraView({
+				rect : {
+					x : 0,
+					y : 0,
+					w : api.frameWidth,
+					h : api.frameHeight
+				},
+				topOffset : 44,
+				fixedOn : api.frameName,
+				fixed : true,
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function pauseCameraView(){
+	        demo.pauseCameraView(function(ret,err){
+	        	//alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function resumeCameraView(){
+	        demo.resumeCameraView(function(ret,err){
+	        	//alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function hideCameraView() {
+			demo.hideCameraView(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function showCameraView() {
+			demo.showCameraView(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function closeCameraView() {
+			demo.closeCameraView(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function switchLight() {
+			demo.switchLight(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+	</script>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				当前账号:</br>
+				<input type="text" class="input1" name="user1" id="user1" size="40" value="111111"/></br>
+				好友账号:</br>
+				<input type="text" class="input1" name="user2" id="user2" size="40" value="222222"/></br>
+				
+				群号:</br>
+				<input type="text" class="input1" name="group" id="group" size="40" value="2331359524"/></br>
+				<a class="button" tapmode="active" onclick="initYWIMKit()" >初始化</a>     
+				<a class="button" tapmode="active" onclick="login()" >登陆</a>    
+				<a class="button" tapmode="active" onclick="openConversationActivity()" >打开会话列表</a>  
+				<a class="button" tapmode="active" onclick="openChattingActivity()" >打开普通单聊界面</a>     
+				<a class="button" tapmode="active" onclick="openTribeChattingActivity()" >打开群聊天界面</a>
+	            <a class="button" tapmode="active" onclick="logout()" >退出</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('openIM');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+		
+		function initYWIMKit(){
+			var user1 = document.getElementById("user1").value;
+	        demo.initYWIMKit({
+	        	title : {
+	        		color : '#000000',   	//标题字体颜色
+	        		background : '#48C997'  //标题栏背景色
+	        	},
+	        	userid : user1
+	        },function(ret, err){
+	        	alert(JSON.stringify(ret)+"  "+JSON.stringify(err));
+	        });
+		}
+		
+		function login(){
+	        demo.login({
+	        	password : '123456'
+	        },function(ret, err){
+	        	alert(JSON.stringify(ret)+"  "+JSON.stringify(err));
+	        });
+		}
+		
+		function openConversationActivity(){
+	        demo.openConversationActivity(function(ret, err){
+	        	alert(JSON.stringify(ret)+"  "+JSON.stringify(err));
+	        });
+		}
+		
+		function openChattingActivity(){
+			var user2 = document.getElementById("user2").value;
+	        demo.openChattingActivity({
+	        	target : user2   //消息接收者ID
+	        },function(ret, err){
+	        	alert(JSON.stringify(ret)+"  "+JSON.stringify(err));
+	        });
+		}
+		
+		function openTribeChattingActivity(){
+			var group = document.getElementById("group").value;
+			
+	        demo.openTribeChattingActivity({
+	        	tribeId : group
+	        },function(ret, err){
+	        	alert(JSON.stringify(ret)+"  "+JSON.stringify(err));
+	        });
+		}
+		
+		function logout(){
+	        demo.logout(function(ret, err){
+	        	alert(JSON.stringify(ret)+"  "+JSON.stringify(err));
+	        });
+		}
+	</script>
+</html>

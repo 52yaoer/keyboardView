@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="openCameraView()">打开相机预览</a>
+				<a class="button" tapmode="active" onclick="hideCameraView()">隐藏相机预览</a>
+				<a class="button" tapmode="active" onclick="showCameraView()">显示相机预览</a>
+				<a class="button" tapmode="active" onclick="closeCameraView()">关闭相机预览</a>
+				<a class="button" tapmode="active" onclick="switchLight()">闪光灯切换</a>
+				<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('ocrModule');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+			addEventListener();
+			
+			api.addEventListener({
+			    name:'pause'
+			}, function(ret,err){
+	        	pauseCameraView();
+	        });
+	        
+	    	api.addEventListener({
+			    name:'resume'
+			}, function(ret,err){
+	        	resumeCameraView();
+	        });
+		}
+		function addEventListener() {
+			demo.addEventListener(function(ret, err) {
+				api.toast({
+					msg : JSON.stringify(ret)
+				});
+				
+				//hideCameraView();
+			});
+		}
+
+		function openCameraView() {
+			demo.openCameraView({
+				rect : {
+					x : 0,
+					y : 0,
+					w : api.frameWidth,
+					h : api.frameHeight
+				},
+				topOffset : 24, //上下偏移量(Android有效)，调整选择框对应相机截图位置，开启debug模式后，可以在相册获取相机图片和截取识别图片，进行对比来调整偏移值.
+				fixedOn : api.frameName,
+				fixed : true,
+				isDebug : true, //是否开启debug模式(Android有效)，开启debug模式会在相册生成相机拍摄图片和识别截取图片，用来对比位置，方便用户设置偏移位置的值
+				isParseData : true,//是否解析识别结果字符串.  默认解析
+				regexText : "(1|861)(3|5|6|7|8|9)\\d{9}$*",   //解析字符串正则表达式 默认手机号正则
+				delayTime : 800, //每次解析图片处理后延时时间 ,默认值 :300毫秒
+				charWhitelist : "0123456789", //ocr白名单 默认值:0123456789
+				charBlacklist : "!@#$%^&*()_+=-[]}{;:'\"\\|~`,./<>?" ,//ocr黑名单 默认值: !@#$%^&*()_+=-[]}{;:'\"\\|~`,./<>?
+				engineMode : 0, //识别模式: 0 : 最快 1 : 准确但是慢 2 : 最慢最准确
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function pauseCameraView(){
+	        demo.pauseCameraView(function(ret,err){
+	        	//alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function resumeCameraView(){
+	        demo.resumeCameraView(function(ret,err){
+	        	//alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function hideCameraView() {
+			demo.hideCameraView(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function showCameraView() {
+			demo.showCameraView(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function closeCameraView() {
+			demo.closeCameraView(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function switchLight() {
+			demo.switchLight(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+	</script>
+</html>

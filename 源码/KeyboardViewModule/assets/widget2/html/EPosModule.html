@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="eposUmsSetupDevice()">绑定设备</a>
+				<a class="button" tapmode="active" onclick="eposUmsPay()">支付</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('EPos');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+		function eposUmsSetupDevice(){
+	        demo.eposUmsSetupDevice({
+	        	billsMID: "shouji000000004",
+				billsTID: 'sj000004',
+				ums_request: '{"business_id":"ums.device.connect.iertsl9s","data":{"billsTID":"sj000004","billsMID":"shouji000000004"},"extend_params":{}}',
+	        }, function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		function eposUmsPay(){
+	        demo.eposUmsPay({
+				ums_request: '{"business_id":"ums.trade.pay.wo8y2lsu","data":{"isShowEVoucherPage":"false","consumerPhone":"18811112222","signDirection":"horizontal","amount":"5530","billsMID":"898932093909984","merOrderId":"e38f2f3f50a0d45ee0d7b169ff041d84","memo":"","unsupportedCardType":1,"couponNo":"券码不可用","payType":"BANKCARD","saleSlipFavorite":"defaultType","isShowOrderInfo":"false","billsTID":"93909985","merOrderDesc":"xxx","operator":"10","serialNum":"","couponType":"0","orgCode":"","consumerEmail":""},"extend_params":{},"sign":"jr2nmMtfYsyjFng/oB+OOdRjiEISUgVvC2XkJlHvSQm5e8X9fbwQLzrKAOHSS5nsYwTxI3nxhKEUA4Ndvcwh8J1UzwUYDnBPAgyjGBWmzsieltty4YVqDsOmQVJfrnt8VVRqYa9rd6/7jzODUuwG5n7aMueBOKF5pgjbO2XEke8="}',
+	        }, function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+
+	</script>
+</html>

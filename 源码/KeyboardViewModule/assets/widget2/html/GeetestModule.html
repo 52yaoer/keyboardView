@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="gt3TestOpen()" >打开验证码界面</a>
+				<a class="button" tapmode="active" onclick="gt3Dismiss()" >关闭验证码界面</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('geetestModule');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+		function gt3TestOpen(){
+	        demo.gt3TestOpen({
+	        	api1Url : "http://www.geetest.com/demo/gt/register-slide",
+	        	api2Url : "http://www.geetest.com/demo/gt/validate-slide", //设置二次验证的URL
+	        	isCustomApi2 : false      //设置是否自定义第二次验证(true 开启 false 不开启)
+	        }, function(ret, err){
+	        	//ret.evenType  == gt3CloseDialog  data ->  1 点击验证码的关闭按钮来关闭验证码 3 点击返回键关闭验证码
+				//ret.evenType  == gt3GetDialogResult 拿到第二个url（API2）需要的数据(isCustomApi2为true时需要)
+				//ret.evenType  == gt3DialogSuccessResult 验证完成的回调(isCustomApi2为false时才会有值)
+				//ret.evenType  == gt3DialogOnError 验证过程错误
+	        	
+	        	api.toast({ msg : JSON.stringify(ret) });
+	        });
+		}
+
+		function gt3Dismiss() {
+			demo.gt3Dismiss();
+		}
+
+	</script>
+</html>

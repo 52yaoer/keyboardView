@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+			.input1 {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<a class="button" tapmode="active" onclick="init()">初始化播放器</a>
+				<a class="button" tapmode="active" onclick="downloadAndEncryptFile()">下载加密视频</a>
+				<a class="button" tapmode="active" onclick="downloadFile()">下载非加密视频</a>
+				<a class="button" tapmode="active" onclick="openPlayer()">视频播放</a>
+				<a class="button" tapmode="active" onclick="playerUrl()">切换视频播放</a>
+				<a class="button" tapmode="active" onclick="hidePlayer()">隐藏播放器</a>
+				<a class="button" tapmode="active" onclick="showPlayer()">显示播放器</a>
+                <a class="button" tapmode="active" onclick="closePlayer()">关闭播放器</a>
+                <a class="button" tapmode="active" onclick="swichFullView()">大小屏切换</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script>
+		var demo;
+		function init() {
+			demo.init({
+				Android_SecretKey : '1234567887654321'
+			},function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		var downloadPath;
+		var playerDecrypt = false;
+		function downloadAndEncryptFile() {
+			
+			api.download({
+			    url: 'http://7z2dc9.com1.z0.glb.clouddn.com/apicloud/5ffa3a3bb20c71fc0b13b8654ec4f103.mp4',
+			    savePath: 'fs://test1.mp4',
+			    report: true,
+			    cache: true,
+			    allowResume: true
+			}, function(ret, err) {
+			    if (ret.state == 1) {
+			        //下载成功
+			        downloadPath = ret.savePath;
+			        playerDecrypt = true;
+			        alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			    } else {
+					api.toast({ msg : JSON.stringify(ret) });
+			    }
+			});
+		}
+		
+		function downloadFile() {
+			
+			api.download({
+			    url: 'http://7ypsiz.com1.z0.glb.clouddn.com/apicloud/5f14f9abe059fc1d3b83039654bd3fb4.mp4',
+			    savePath: 'fs://test2.mp4',
+			    report: true,
+			    cache: true,
+			    allowResume: true
+			}, function(ret, err) {
+			    if (ret.state == 1) {
+			        //下载成功
+			        downloadPath = ret.savePath;
+			        playerDecrypt = false;
+			        alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			    } else {
+					api.toast({ msg : JSON.stringify(ret) });
+			    }
+			});
+		}
+		
+		
+		function openPlayer() {
+			if (!downloadPath) {
+				downloadPath = 'http://mp4.vjshi.com/2017-09-19/e1920013741c5c66d408c7cdb3d9eddf.mp4';
+			}
+			
+			alert(downloadPath);
+			
+			api.setFullScreen({
+				 fullScreen: true
+			});
+				
+			
+			demo.openPlayer({
+				rect : {
+					x : 0,
+					y : 0,
+					w : api.frameWidth,
+					h : api.frameHeight/2
+				},
+				fixedOn : api.frameName,
+				fixed : true,
+				title : "test",
+				url : downloadPath,
+				isOpenFullView : true,   //是否默认全屏打开 (显示：true 不显示：false 默认:false)
+				isAnthology : true,      //是否显示选集按钮 (显示：true 不显示：false 默认:false)
+				isNextView : true,      //是否显示下一集按钮 (显示：true 不显示：false 默认:false)
+				isShowFullBtn : false, //是否显示大小屏切换按钮 (显示：true 不显示：false 默认:false)
+				isPlayerDecrypt : playerDecrypt //是否本地文件播放加密视频(加密：true 不加密：false 默认:true)
+			}, function(ret, err) {
+				api.toast({ msg : JSON.stringify(ret) + "  " + JSON.stringify(err) });
+				/**
+				onPlayerError : 播放失败
+				onPlayEnd : 播放结束
+				onPlayBackBtn : 返回按钮点击
+				onPlayAnthology : 选集按钮点击
+				onPlayNextVideo : 下一集
+				**/
+				if(ret.status){
+					if(ret.evenType=='onPlayBackBtn'){
+						//alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+						demo.closePlayer();
+					}else if(ret.evenType=='onPlayEnd'){
+						alert("onPlayEnd>>"+JSON.stringify(ret) + "  " + JSON.stringify(err));
+						
+
+						demo.closePlayer();
+						
+						api.setFullScreen({
+						    fullScreen: true
+						});
+						
+					}else if(ret.evenType=='onPlayAnthology'){
+						api.openFrame({
+							name : 'TuQiniuLive_frameBtn',
+							url : 'TuQiniuLive_frameBtn.html',
+							bounces : true,
+							rect : {
+								x : 0,
+								y : 0,
+								w : api.frameWidth,
+								h : api.frameHeight
+							},
+							bgColor : 'rgba(51,51,51,0)'
+						});
+					}else if(ret.evenType=='onPlayNextVideo'){
+						playerUrl();
+					}
+				}
+			});
+		}
+
+		function playerUrl() {
+			demo.playerUrl({
+				title : "playerUrl_title",
+				url : 'http://7ypsiz.com1.z0.glb.clouddn.com/apicloud/5f14f9abe059fc1d3b83039654bd3fb4.mp4'
+			},function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+		
+
+		function showPlayer() {
+			demo.showPlayer(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function hidePlayer() {
+			demo.hidePlayer(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+		
+
+		function closePlayer() {
+			demo.closePlayer(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+		
+		
+
+		function apiready() {
+			demo = api.require('decryptPlayer');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+	</script>
+</html>

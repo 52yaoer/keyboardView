@@ -1,0 +1,5 @@
+{
+    "name":"keyboardView",
+    "class":"KeyboardViewModule",
+    "methods":["addKeyboardListener","removeKeyboardListener"]
+ }

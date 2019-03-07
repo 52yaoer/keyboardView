@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="onInitial()" >优酷播放器初始化</a>
+				<a class="button" tapmode="active" onclick="backBtn()" >窗口播放返回按钮监听</a>
+				<a class="button" tapmode="active" onclick="openPlayer()" > 打开播放器</a>
+				<a class="clickbtn" tapmode="active" onclick="pausePlayer()" >暂停播放</a>     
+				<a class="clickbtn" tapmode="active" onclick="playPlayer()" >继续播放</a>   
+				<a class="button" tapmode="active" onclick="closePlayer()" >关闭播放器</a>
+				<a class="button" tapmode="active" onclick="isFullScreen()" >是否全屏</a>
+				<a class="button" tapmode="active" onclick="full()" >进入全屏</a>
+				<a class="button" tapmode="active" onclick="unfull()" >退出全屏</a> 
+				<a class="button" tapmode="active" onclick="downInfos()" >下载任务列表</a>
+				<a class="button" tapmode="active" onclick="downLoaderListener()" >下载监听</a>
+				<a class="button" tapmode="active" onclick="addNewDownLoad()" >添加下载</a>
+				<a class="button" tapmode="active" onclick="startDownLoad()" >开始下载</a>
+				<a class="button" tapmode="active" onclick="stopDownLoad()" >停止下载</a>
+				<a class="button" tapmode="active" onclick="deleteDownLoad()" >删除下载</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('youku');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+		function onInitial() {
+			demo.onInitial({
+				clientId : '792b1d08a5348d0d',
+				clientSecret : '9a98ce3841ae9f686fbea940a93b8167'
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function backBtn() {
+			demo.backBtn(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function openPlayer() {
+			demo.openPlayer({
+				rect : {
+					x : 0,
+					y : api.frameHeight / 3,
+					w : api.frameWidth - 0,
+					h : api.frameHeight / 3
+				},
+				fixedOn : api.frameName,
+				fixed : true,
+				isShowFullBtn : true, //是否显示全屏按钮
+				isShowBackBtn : true, //是否显示返回按钮
+				isShowVideoQualityBtn : true, //是否显示清晰度选择按钮
+				//videoDefinition : 'HD', //默认播放视频类型 LOW STANDARD HD HD2 HD3
+				vid : 'XMTM2MDQ5MzUxMg==',
+				password : '',
+				local : false, //是否本地缓存
+				enableFull : true //是否直接全屏播放
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+		
+		function pausePlayer(){
+	        demo.pausePlayer(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function playPlayer(){
+	        demo.playPlayer(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		
+		
+		function closePlayer() {
+			demo.closePlayer(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+		
+		
+		function isFullScreen(){
+	        demo.isFullScreen(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		
+		
+		function full(){
+	        demo.full(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function unfull(){
+	        demo.unfull(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+
+		function downInfos() {
+			demo.downInfos(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function downLoaderListener() {
+			demo.downLoaderListener(function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function addNewDownLoad() {
+			demo.addNewDownLoad({
+				videoDefinition : 'HD',
+				vid : 'XMTM2MDQ5MzUxMg=='
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function startDownLoad() {
+			demo.startDownLoad({
+				vid : 'XMTM2MDQ5MzUxMg=='
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function stopDownLoad() {
+			demo.stopDownLoad({
+				vid : 'XMTM2MDQ5MzUxMg=='
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+
+		function deleteDownLoad() {
+			demo.deleteDownLoad({
+				vid : 'XMTM2MDQ5MzUxMg=='
+			}, function(ret, err) {
+				alert(JSON.stringify(ret));
+			});
+		}
+	</script>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="initKernal()">初始化sdk</a>
+				<a class="button" tapmode="active" onclick="openEtScanActivity()">打开识别预览</a>
+				<a class="button" tapmode="active" onclick="openUIMediaScanner()">打开相册</a>
+				<a class="button" tapmode="active" onclick="openFNPhotograph()">打开相机</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		apiready = function() {
+			demo = api.require('carVIN');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+		function initKernal() {
+			demo.initKernal({
+				keyName : '2D5B23D50E370D4D9F0A',
+				keyPath : 'widget://res/2D5B23D50E370D4D9F0A.lic'
+			}, function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function openEtScanActivity() {
+			demo.openEtScanActivity(function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+				//ret.onBackBtn
+				//onSuccess
+			});
+		}
+
+		function disVinCode(imagePath) {
+			demo.disVinCode({
+				imagePath : imagePath
+			}, function(ret, err) {
+				alert(JSON.stringify(ret) + "  " + JSON.stringify(err));
+			});
+		}
+
+		function openUIMediaScanner() {
+			var UIMediaScanner = api.require('UIMediaScanner');
+			UIMediaScanner.open({
+				type : 'picture',
+				column : 4,
+				classify : true,
+				max : 1,
+				sort : {
+					key : 'time',
+					order : 'desc'
+				},
+				texts : {
+					stateText : '已选择*项',
+					cancelText : '取消',
+					finishText : '完成'
+				},
+				styles : {
+					bg : '#fff',
+					mark : {
+						icon : '',
+						position : 'bottom_left',
+						size : 20
+					},
+					nav : {
+						bg : '#eee',
+						stateColor : '#000',
+						stateSize : 18,
+						cancelBg : 'rgba(0,0,0,0)',
+						cancelColor : '#000',
+						cancelSize : 18,
+						finishBg : 'rgba(0,0,0,0)',
+						finishColor : '#000',
+						finishSize : 18
+					}
+				},
+				scrollToBottom : {
+					intervalTime : 3,
+					anim : true
+				},
+				exchange : true,
+				rotation : true
+			}, function(ret) {
+				if (ret.eventType == 'confirm') {
+					//alert(JSON.stringify(ret));
+					var path = ret.list[0].path;
+					
+					UIMediaScanner.transPath({
+						path : path
+					}, function(ret, err) {
+						if (ret) {
+							disVinCode(ret.path);
+							//alert(JSON.stringify(ret));
+						} else {
+							alert(JSON.stringify(err));
+						}
+					});
+					
+					
+				}
+			});
+		}
+
+		function openFNPhotograph() {
+			var FNPhotograph = api.require('FNPhotograph');
+			FNPhotograph.open({
+				path : 'fs://',
+				album : true,
+				quality : 'medium'
+			}, function(ret) {
+				alert(JSON.stringify(ret));
+				if (ret.eventType == 'takePhoto') {
+					var path = ret.imagePath;
+					disVinCode(path);
+				}
+			});
+		}
+	</script>
+</html>

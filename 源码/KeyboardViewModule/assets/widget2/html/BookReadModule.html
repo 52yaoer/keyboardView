@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	</head>
+	<body></body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript">
+		var demo;
+		apiready = function() {
+			api.parseTapmode();
+			demo = api.require('bookread');
+			api.setFullScreen({
+				fullScreen : true
+			});
+			
+			api.addEventListener({
+	            name:'closeframe'
+            },function(ret,err){
+            	api.closeFrame({
+            		name : 'BookReadModule_btn'
+                });
+            });
+			
+			
+			demo.openBook({
+				name : 'testpush',
+				path : 'widget://res/A1234567890.txt',
+				isClearCache : false
+			}, function(ret, err) {
+				//api.toast({
+				//	msg : "openBook>>" + JSON.stringify(ret) + "   " + JSON.stringify(err)
+				//});
+				
+				if (ret.evenType == 'click') {
+					api.openFrame({
+						name : 'BookReadModule_btn',
+						url : 'BookReadModule_btn.html',
+						bounces : true,
+						rect : {
+							x : 0,
+							y : 0,
+							h : api.frameHeight - 100
+						},
+						bgColor : 'rgba(51,51,51,0)'
+					});
+				} else if (ret.evenType == 'page_down') {
+				} else if (ret.evenType == 'page_up') {
+				} else if (ret.evenType == 'page_begin') {
+				} else if (ret.evenType == 'page_end') {
+				}
+			});
+		};
+		
+	</script>
+</html>

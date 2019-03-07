@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>WinA</title>
+    <link rel="stylesheet" type="text/css" href="css/api.css" />
+    <link rel="stylesheet" type="text/css" href="css/box.css" />
+    <script type="text/javascript" src="script/public.js"></script>
+    <style>
+    	p{
+    		color:#999;
+    		padding:5px;
+    	}
+    </style>
+	<script type="text/javascript">
+	    
+		var uzmoduledemo = null;
+		apiready = function(){
+	    	uzmoduledemo = api.require('keyboardView');
+	    }
+	    
+		function addKeyboardListener(){
+	        uzmoduledemo.addKeyboardListener({
+	        	height : 40,
+	        	lineColor : '#e6e6e6',
+	        	backgroundColor : '#fdfdfe',
+	        	data : [{
+	        			id : 'name0',
+	        			icon : 'widget://res/ic_category_0.png'
+	        		},{
+	        			id : 'name1',
+	        			icon : 'widget://res/ic_category_1.png'
+	        		},{
+	        			id : 'name2',
+	        			icon : 'widget://res/ic_category_2.png'
+	        		},{
+	        			id : 'name3',
+	        			icon : 'widget://res/ic_category_3.png'
+	        		},{
+	        			id : 'name4',
+	        			icon : 'widget://res/ic_category_4.png'
+	        		}],
+				fixedOn : api.frameName,
+				fixed : true,
+	        }, function(ret, err){
+	        	alert("22>>"+JSON.stringify(ret));
+	        });
+		}
+	    
+	    function removeKeyboardListener(){
+	        uzmoduledemo.removeKeyboardListener(function(ret, err){
+	        	alert(JSON.stringify(ret));
+	        });
+		}
+	    
+	    
+	    function openNew(){
+	    	api.openWin({
+	            name: '111',
+	            url: 'index_frm.html'
+            });
+	    }
+	</script>
+</head>
+<body>
+    <div id="wrap">
+        <div id="main">
+        	<br>
+				<div class="clickbtn" tapmode="active" onclick="addKeyboardListener()" >键盘顶部菜单设置</div>     
+				<input type="number" id="vibrate" value="20000" />
+				<div class="clickbtn" tapmode="active" onclick="removeKeyboardListener()" >移除键盘顶部菜单</div>     
+				<div class="clickbtn" tapmode="active" onclick="openNew()" >打开新页面测试</div>     
+			<br>
+		</div>
+	</div>
+</body>
+</html>

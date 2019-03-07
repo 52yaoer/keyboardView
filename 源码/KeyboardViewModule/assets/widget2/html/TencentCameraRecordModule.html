@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="startVideoRecordActivity()" >启动录制</a>
+				<a class="button" tapmode="active" onclick="testPlay()" >测试播放</a>
+				<a class="button" tapmode="active" onclick="initUploadService()" >初始化</a>
+				<a class="button" tapmode="active" onclick="uploadFile()" >上传</a>
+				<a class="button" tapmode="active" onclick="downloadFile()" >下载</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		var _signature  = 'BzyPaRMRVskQyDHl49GCsgT3VnxzZWNyZXRJZD1BS0lETHhqTHFWZEo0eHZxVER0ZWFNRjFmUUhKUGpBcTd3UTAmY3VycmVudFRpbWVTdGFtcD0xNTE2MDg0MjU3JmV4cGlyZVRpbWU9MTUxNjE3MDY1NyZyYW5kb209MTUyNzA=';
+		apiready = function() {
+			demo = api.require('tencentCameraRecord');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+		var path;
+		function startVideoRecordActivity() {
+			demo.startVideoRecordActivity({
+				minDuration : 5, //最短时长(秒)
+				maxDuration : 15, //最长时长(秒)
+				aspectRatio : 2, //视频比例 0 > 1:1 1 > 4:3 2 > 16:9
+				recordResolution : 1, // 录制分辨率 0 > 360_640 1 > 540_960 2 > 720_1280
+				biteRate : 3000, // 码率 600-4800
+				fps : 25, // 帧率 15-30
+				gop : 5, //关键帧间隔 1-10
+				signature : _signature,
+				isFront : true, //是否前置摄像头 true 前置 fasle 后置 默认 true
+				isBeauty : true, //是否显示美颜按钮 true 显示 false 隐藏 默认 true
+				isMusic : true, //是否显示音乐按钮 true 显示 false 隐藏 默认 false
+				isDownloadBtn : true,//是否显示下载按钮 true 显示 false 隐藏 默认 true
+				musics : [{
+					filePath : 'widget://res/bandari.mp3',
+					soneName : 'bandari(本地测试)',
+					singerName : 'bandari',
+				}, {
+					filePath : 'http://7z2dc9.com1.z0.glb.clouddn.com/apicloud/be59ba6f9527382d655abc50f720871e.mp3',
+					soneName : 'bandari(在线测试)',
+					singerName : 'bandari',
+				}]
+			}, function(ret, err) {
+				alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+				if (ret.status) {
+					path = ret.data.filePath;
+				}
+			});
+		}
+
+
+		function uploadMp4File() {
+			demo.uploadMp4File({
+				signature : _signature, //签名(必输)  signature计算规则可参考 https://www.qcloud.com/document/product/266/9221
+				videoPath : 'widget://res/test1.mp4', //待上传视频路径(必输)
+				coverImagePath : '', //视频封面(可选)
+				customKey : 'customID'
+			}, function(ret, err) {
+				if (ret.status) {//Progress|Complete
+					if (ret.evenType == 'Progress') {
+						api.toast({
+							msg : JSON.stringify(ret) + " " + JSON.stringify(err)
+						});
+					} else if (ret.evenType == 'Complete') {
+						//					andoird ->> retCode
+						//						0	NO_ERROR	上传成功
+						//						1001	ERR_UGC_REQUEST_FAILED	请求上传失败，通常是客户端签名过期或者非法，需要 App 重新申请签名
+						//						1002	ERR_UGC_PARSE_FAILED	请求信息解析失败
+						//						1003	ERR_UPLOAD_VIDEO_FAILED	上传视频失败
+						//						1004	ERR_UPLOAD_COVER_FAILED	上传封面失败
+						//						1005	ERR_UGC_FINISH_REQUEST_FAILED	结束上传请求失败
+						//						1006	ERR_UGC_FINISH_RESPONSE_FAILED	结束上传响应错误
+						//						1007	ERR_CLIENT_BUSY	客户端正忙(对象无法处理更多请求)
+						//						1008	ERR_FILE_NOEXIT	上传文件不存在
+						//						1009	ERR_UGC_PUBLISHING	视频正在上传中
+						//						1010	ERR_UGC_INVALID_PARAM	上传参数为空
+						//						1012	ERR_UGC_INVALID_SIGNATURE	视频上传 signature 为空
+						//						1013	ERR_UGC_INVALID_VIDOPATH	视频文件的路径为空
+						//						1014	ERR_UGC_INVALID_VIDEO_FILE	当前路径下视频文件不存在
+						//						1015	ERR_UGC_FILE_NAME	视频上传文件名太长（超过 40）或含有特殊字符
+						//						1016	ERR_UGC_INVALID_COVER_PATH	视频文件封面路径不对，文件不存在
+						//					iOS >> retCode
+						//						0	TVC_OK	上传成功
+						//						1001	TVC_ERR_UGC_REQUEST_FAILED	请求上传失败，通常是客户端签名过期或者非法，需要 app 重新申请签名
+						//						1002	TVC_ERR_UGC_PARSE_FAILED	请求信息解析失败
+						//						1003	TVC_ERR_VIDEO_UPLOAD_FAILED	上传视频失败
+						//						1004	TVC_ERR_COVER_UPLOAD_FAILED	上传封面失败
+						//						1005	TVC_ERR_UGC_FINISH_REQ_FAILED	结束上传请求失败
+						//						1006	TVC_ERR_UGC_FINISH_RSP_FAILED	结束上传响应错误
+						//						1008	TVC_ERR_FILE_NOT_EXIST	上传文件不存在
+						//						1012	TVC_ERR_INVALID_SIGNATURE	视频上传 signature 为空
+						//						1013	TVC_ERR_INVALID_VIDEOPATH	视频文件的路径为空
+						//						1017	TVC_ERR_USER_CANCLE	用户调用取消上传
+						alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+					}
+				} else {
+					api.toast({
+						msg : JSON.stringify(ret) + " " + JSON.stringify(err)
+					});
+				}
+			});
+		}
+		
+		function testPlay() {
+			if (path) {
+				api.openVideo({
+					url : path
+				});
+			}
+		}
+
+		function initUploadService() {
+			demo.initUploadService({
+				appid : '1252112925',
+				secretId : 'AKIDRgiX7Q5MvNbdQylLBm7F9oEPPAgwljJd',
+				secretKey : 'DCvObYKq54mFSR9fz4tWt2vYx73jDSTD',
+				token : '',
+				region : 'ap-beijing'//区域: ap-beijing-1,ap-beijing,ap-shanghai,ap-guangzhou,ap-guangzhou-2,ap-chengdu,ap-singapore,ap-hongkong,na-toronto,eu-frankfurt,cn-north,cn-south,cn-east,cn-southwest,sg
+			}, function(ret, err) {
+				api.toast({
+					msg : JSON.stringify(ret) + " " + JSON.stringify(err)
+				});
+			});
+		}
+
+		function uploadFile() {
+			demo.uploadFile({
+				bucketName : 'tyousan', //"存储桶名称"; // cos v5 的 bucket格式为：xxx-appid, 如 test-1253960454
+				cosPath : '/demo/test_upload1.mp4', //"远端路径，即存储到 COS 上的绝对路径"; //格式如 cosPath = "/test.txt";
+				srcPath : 'fs://test_dowload.mp4',    //"本地文件的绝对路径"; fs://
+			}, function(ret, err) {
+				if (ret.status) {//onStart|onProgress|onSuccess|onFail
+					if (ret.evenType == 'onSuccess') {
+						alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+					} else if (ret.evenType == 'onFail') {
+						alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+					} else {
+						api.toast({
+							msg : JSON.stringify(ret) + " " + JSON.stringify(err)
+						});
+					}
+				} else {
+					api.toast({
+						msg : JSON.stringify(ret) + " " + JSON.stringify(err)
+					});
+				}
+			});
+		}
+
+		function downloadFile() {
+			demo.downloadFile({
+				bucketName : 'tyousan', //"存储桶名称"; // cos v5 的 bucket格式为：xxx-appid, 如 test-1253960454
+				cosPath : '/demo/test_upload.mp4', //"远端路径，即存储到 COS 上的绝对路径";
+				savePath : 'fs:///test_dowload.mp4', //"下载到本地的路径"; fs://
+			}, function(ret, err) {
+				if (ret.status) {//onStart|onProgress|onSuccess|onFail
+					if (ret.evenType == 'onSuccess') {
+						alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+					} else if (ret.evenType == 'onFail') {
+						alert(JSON.stringify(ret) + " " + JSON.stringify(err));
+					} else {
+						api.toast({
+							msg : JSON.stringify(ret) + " " + JSON.stringify(err)
+						});
+					}
+				} else {
+					api.toast({
+						msg : JSON.stringify(ret) + " " + JSON.stringify(err)
+					});
+				}
+			});
+		}
+	</script>
+</html>

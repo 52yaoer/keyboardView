@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="initMeiQia()">初始化</a>
+				<a class="button" tapmode="active" onclick="show()">打开美洽客服</a>
+			</div>
+		</div>
+	</body>
+	<script>
+		var demo;
+		function initMeiQia() {
+			var param = {
+				appkey : "64cd898e9f74c71d25a26ecb8a0c9e74"
+			};
+			//初始化美洽
+			demo.initMeiQia(param, function(ret, err) {
+				if (ret) {
+					//alert("初始化成功：\n\n" + JSON.stringify(ret) + "\n\n点击按钮继续");
+				} else {
+					alert("初始化失败：\n\n" + JSON.stringify(err));
+				}
+			})
+		}
+
+		//配置功能参数，并显示美洽窗口
+		function show() {
+			//设置指定分配给某某客服
+			//var scheduleParam = {
+			//    agentId:"美洽客服的ID"
+			//};
+			//mq.setScheduledAgentOrAgentGroup(scheduleParam);
+			//设置用户信息
+			var infoParam = {
+				email : "dev@meiqia.com",
+				comment : "这是备注",
+				avatar : "https://app.meiqia.com/images/logo.png",
+				tags : ["手机APP", "北京"],
+				"服务器" : "电信一区"
+			};
+			demo.setClientInfo(infoParam);
+			//设置自定义用户Id
+			var customizedIdParam = {
+				id : "id00001"
+			};
+			demo.setLoginCustomizedId(customizedIdParam);
+			//设置美洽ID
+			//var clientIdParam = {
+			//    id:"9f0b2d3339edeec591a6e3be5dbafd64"
+			//};
+			//mq.setLoginMQClientId(clientIdParam);
+			//设置标题栏背景颜色
+			var titleBarColor = {
+				color : "#17c7d0"
+			};
+			demo.setTitleBarColor(titleBarColor);
+			//设置title以及按钮颜色
+			var titleColor = {
+				color : "#ffffff"
+			};
+			demo.setTitleColor(titleColor);
+			//打开美洽客服界面
+			demo.show();
+		}
+
+		function apiready() {
+			demo = api.require('meiQia');
+		}
+	</script>
+</html>

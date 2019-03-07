@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<widget id="A6900244255958" version="0.0.1"> 
+  <name>收费模块demo</name>  
+  <description>Example For APICloud.</description>  
+  <author email="developer@apicloud.com" href="http://www.apicloud.com">Developer</author>  
+  <content src="index.html"/>  
+  <preference name="pageBounce" value="false"/>  
+  <preference name="appBackground" value="rgba(0,0,0,0.0)"/>  
+  <preference name="windowBackground" value="rgba(0,0,0,0.0)"/>  
+  <preference name="frameBackgroundColor" value="rgba(0,0,0,0.0)"/>  
+  <preference name="hScrollBarEnabled" value="true"/>  
+  <preference name="vScrollBarEnabled" value="true"/>  
+  <preference name="autoLaunch" value="true"/>  
+  <preference name="fullScreen" value="false"/>  
+  <preference name="autoUpdate" value="true"/>  
+  <preference name="smartUpdate" value="false"/>  
+  <preference name="debug" value="true"/>  
+  <preference name="iOS7StatusBarAppearance" value="true"/>  
+  <preference name="statusBarAppearance" value="true"/>  
+  <meta-data name="com.google.android.geo.API_KEY" value="AIzaSyCfpp2ybCOHUr7FayLIK_jGU5Sbkxr9RLE"/>  
+  <meta-data name="BDAPPID" value="3311903"/>  
+  <meta-data name="BDAPPKEY" value="jOUrp6QGvdEqPj6G4xMPGk54"/>  
+  <meta-data name="com.baidu.speech.APP_ID" value="11103234"/>  
+  <meta-data name="com.baidu.speech.API_KEY" value="0bAl9sQVqEa6saDfnPvA7Skz"/>  
+  <meta-data name="com.baidu.speech.SECRET_KEY" value="b7726e82a5e0b093338a0da2b613579e"/>  
+  <permission name="readPhoneState"/>  
+  <permission name="camera"/>  
+  <permission name="record"/>  
+  <permission name="location"/>  
+  <permission name="fileSystem"/>  
+  <permission name="internet"/>  
+  <permission name="bootCompleted"/>  
+  <permission name="hardware"/>  
+  <access origin="*"/>  
+  <feature name="openIM1"> 
+    <param name="AppKey_Android" value="24652423"/>  
+    <param name="AppKey_iOS" value="24652423"/> 
+  </feature>  
+  <feature name="webSocket1"> 
+    <param name="isGlobal" value="true"/> 
+  </feature>  
+  <feature name="nim_self"> 
+    <param name="AppKey" value="9db2db8540544200a606ba10ab1645e1"/>  
+    <param name="ApnsCername" value=""/> 
+  </feature>  
+  <feature name="youmi1"> 
+    <param name="appId" value="254831dafd4038d0"/>  
+    <param name="appSecret" value="1d2fb82896e56489"/> 
+  </feature>  
+  <feature name="playMp41"> 
+    <param name="AndroidRegCode" value="CFE544B8FC"/>  
+    <param name="iOSRegCode" value="EBA9494298"/> 
+  </feature>  
+  <feature name="nim_1"> 
+    <param name="AppKey" value="45c6af3c98409b18a84451215d0bdd6e"/>  
+    <param name="ApnsCername" value=""/> 
+  </feature>  
+  <feature name="aliPush1"> 
+    <param name="AppKey_iOS" value="23398490"/>  
+    <param name="AppSecret_iOS" value="e4af5692df06ebbc621b55657ca4a4bc"/>  
+    <param name="AppKey_Android" value="23398490"/>  
+    <param name="AppSecret_Android" value="e4af5692df06ebbc621b55657ca4a4bc"/>  
+    <param name="XmAppID" value="2882303761517555497"/>  
+    <param name="XmAppKey" value="5961755590497"/> 
+  </feature>  
+  <feature name="aliPushNoUtdId1"> 
+    <param name="AppKey_iOS" value="23398490"/>  
+    <param name="AppSecret_iOS" value="e4af5692df06ebbc621b55657ca4a4bc"/>  
+    <param name="AppKey_Android" value="23398490"/>  
+    <param name="AppSecret_Android" value="e4af5692df06ebbc621b55657ca4a4bc"/>  
+    <param name="XmAppID" value="2882303761517555497"/>  
+    <param name="XmAppKey" value="5961755590497"/> 
+  </feature>  
+  <feature name="baiduAR1"> 
+    <param name="AppId" value="10505227"/>  
+    <param name="APIKey" value="bsZQtN53DSWPbMuQqWhjFycO"/>  
+    <param name="SecretKey" value="ozhyztAAW9lta0nHdjCeQmYbVI33RGct"/> 
+  </feature>  
+  <feature name="googleMap1"> 
+    <param name="ios_api_key" value="AIzaSyDiUlOUgkAmiwXRJfV7vln4rmSTHGXvvcY"/>  
+    <param name="ios_directions_key" value="AIzaSyDiUlOUgkAmiwXRJfV7vln4rmSTHGXvvcY"/> 
+  </feature>  
+  <feature name="ocrMobile1"> 
+    <param name="iOS_Appkey" value="2f954b56d5bea2473f802c1960-vagfvt"/>  
+    <param name="Android_Appkey" value="47bf8d4580b10338a47e2c0b10-vagfvt"/> 
+  </feature>  
+  <feature name="tutuQiniuLive1"> 
+    <param name="TuSdk_AppKey_iOS" value="5cc494513729c3fb-02-2xlor1"/>  
+    <param name="TuSdk_AppKey_Android" value="5cc494513729c3fb-02-2xlor1"/> 
+  </feature>  
+  <feature name="BugId"> 
+    <param name="android_id" value="7d1849d990"/>  
+    <param name="ios_id" value="7d1849d990"/> 
+  </feature>  
+  <feature name="baiduFaceLogin1"> 
+    <param name="LicenseID_iOS" value="hcc-test-face-face-ios"/>  
+    <param name="LicenseFileName_iOS" value="idl-license.face-ios"/>  
+    <param name="LicenseID_Android" value="hcc-test-face-face-android"/>  
+    <param name="LicenseFileName_Android" value="idl-license.face-android"/> 
+  </feature>  
+  <feature name="baiduSpeech1"> 
+    <param name="AppId_Android" value="11103234"/>  
+    <param name="ApiKey_Android" value="0bAl9sQVqEa6saDfnPvA7Skz"/>  
+    <param name="SecretKey_Android" value="b7726e82a5e0b093338a0da2b613579e"/>  
+    <param name="AppId_iOS" value="11100864"/>  
+    <param name="ApiKey_iOS" value="AzrTpftNioFkRNtHqhtNsSr1"/>  
+    <param name="SecretKey_iOS" value="8BSNvVxYIwzQosASqMQSU0Yb18wqae2H"/> 
+  </feature>  
+  <feature name="baiduFaceLive1"> 
+    <param name="LicenseID_iOS" value="hcc-test-face-face-ios"/>  
+    <param name="LicenseFileName_iOS" value="idl-license.face-ios"/>  
+    <param name="LicenseID_Android" value="hcc-test-face-face-android"/>  
+    <param name="LicenseFileName_Android" value="idl-license.face-android"/> 
+  </feature> 
+</widget>

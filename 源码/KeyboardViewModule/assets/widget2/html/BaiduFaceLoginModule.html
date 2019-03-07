@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Module Develop</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<style type="text/css">
+			html, body {
+				height: 100%
+			}
+			body {
+				background-color: #fff;
+				margin: 0;
+			}
+			#wrap {
+				height: 100%;
+				position: relative;
+			}
+			#header {
+				padding-top: 20px;
+				background-color: #5082c2;
+				height: 44px;
+				position: relative;
+			}
+			#header h1 {
+				font-size: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0em;
+				color: #fff;
+				margin-left: 100px;
+				margin-right: 100px;
+				text-align: center;
+			}
+			#main {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+			}
+			a.button {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-box-pack: center;
+				-webkit-box-align: center;
+				height: 32px;
+				margin: 8px;
+				background-color: rgba(240,240,240,1.0);
+				border-color: rgba(220,220,220,1.0);
+				border-width: 2px;
+				border-style: solid;
+			}
+			a.active {
+				background-color: rgba(240,240,240,0.7);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="main">
+				<a class="button" tapmode="active" onclick="initApiService()" >初始化百度人脸登录服务</a>
+				<a class="button" tapmode="active" onclick="openFaceDetectView()" >打开人脸识别界面</a>
+				<a class="button" tapmode="active" onclick="continueFaceDetect()" >识别结果处理后继续人脸识别</a>
+				<a class="button" tapmode="active" onclick="closeFaceDetectView()" >关闭人脸识别界面</a>
+				<a class="button" tapmode="active" onclick="faceReg()" >人脸注册</a>
+				<a class="button" tapmode="active" onclick="fastLogin()" >快速登录</a>
+				<a class="button" tapmode="active" onclick="faceLogin()" >人脸登录</a>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var demo = null;
+		var index = 0;
+		apiready = function() {
+			demo = api.require('baiduFaceLogin');
+			if (!demo) {
+				alert("请添加模块后编译");
+				return;
+			}
+		}
+		
+		function initApiService(){
+	        demo.initApiService({
+	        	apiKey : 'vEdcXAAsA5eCrKpxsv9qPmiF',
+	        	secretKey : 'EAvnzG7LYd9q5dOEbBxLGZC4zv0GCyRQ',
+	        	groupID : 'zhaofei_20180315'
+	        },function(ret, err){
+	        	alert(JSON.stringify(ret)+" "+JSON.stringify(err));
+	        });
+		}
+	    
+		function openFaceDetectView(){
+	        demo.openFaceDetectView({
+	        	rect : {
+	        		x : 0,
+					y : 0,
+					w : api.frameWidth,
+					h : api.frameHeight,
+	        	},
+	        	fixedOn : api.frameName,
+				fixed : true,
+	        }, function(ret, err){
+	        	if(ret.evenType=='success'){
+	        		fastLogin();
+	        	}else{
+		        	api.toast({
+			            msg : JSON.stringify(ret) +"  "+JSON.stringify(err) 
+		            });
+	        	}
+	        	
+	        });
+		}
+		
+		function continueFaceDetect(){
+	        demo.continueFaceDetect(function(ret, err){
+	        	//alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function closeFaceDetectView(){
+	        demo.closeFaceDetectView(function(ret, err){
+	        	//alert(JSON.stringify(ret));
+	        });
+		}
+		
+		function faceReg(){
+	        demo.faceReg({
+	        	uid : '123333',
+	        	username : 'username'
+	        },function(ret, err){
+	        	alert(JSON.stringify(ret)+" "+JSON.stringify(err));
+	        	if(ret.status){
+	        		closeFaceDetectView();
+	        	}else{
+	        		index ++;
+	        		alert("第"+index+"次了........");
+		        	continueFaceDetect();
+	        	}
+	        });
+		}
+		
+		//快速登录
+	    function fastLogin(){
+	        demo.fastLogin(function(ret, err){
+	        	alert(JSON.stringify(ret)+" "+JSON.stringify(err));
+	        	
+	        	if(ret.status){
+	        		closeFaceDetectView();
+	        	}else{
+	        		index ++;
+	        		alert("第"+index+"次了........");
+		        	continueFaceDetect();
+	        	}
+	        });
+		}
+		
+		function faceLogin(){
+	        demo.faceLogin({
+	        	uid : '123333'
+	        },function(ret, err){
+	        	alert(JSON.stringify(ret)+" "+JSON.stringify(err));
+	        	
+	        	if(ret.status){
+	        		closeFaceDetectView();
+	        	}else{
+	        		index ++;
+	        		alert("第"+index+"次了........");
+		        	continueFaceDetect();
+	        	}
+	        });
+		}
+	</script>
+</html>

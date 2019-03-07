@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<title>frame1</title>
+	</head>
+	<body>
+        <br/>
+        <br/>
+        <br/>
+        <a href="###" onclick="indexToWeb('外网rtsp','rtsp://218.204.223.237:554/live/1/66251FC11353191F/e7ooqwcfbqjoo80j.sdp');">外网rtsp</a>
+        <br/>
+        <br/>
+        <br/>
+        <a href="###" onclick="indexToWeb('内网rtsp','rtsp://192.168.200.233:8554/test-0');">内网rtsp</a>
+        <br/>
+        <br/>
+        <br/>
+        
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript">
+		function indexToWeb(title,url) {
+			api.openWin({
+				name : '11111',
+				bounces : false,
+                pageParam:{"title":title,"url":url},
+				url : 'public.html'
+			});
+		};
+	</script>
+</html>
